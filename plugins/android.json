@@ -21,6 +21,12 @@
         },
         "cordova-plugin-console": {
             "PACKAGE_NAME": "ru.buhta.wms"
+        },
+        "cordova-plugin-tts": {
+            "PACKAGE_NAME": "ru.buhta.wms"
+        },
+        "cordova-plugin-x-toast": {
+            "PACKAGE_NAME": "ru.buhta.wms"
         }
     },
     "dependent_plugins": {

@@ -570,7 +570,6 @@ export class BuhtaTaskScene extends BuhtaCoreScene<IBuhtaTaskSceneProps, BuhtaTa
     }
 
 
-
     renderTargets = (): JSX.Element | null => {
         //return <div>renderTargets</div>;
         let ret: JSX.Element[] = [];
@@ -606,17 +605,24 @@ export class BuhtaTaskScene extends BuhtaCoreScene<IBuhtaTaskSceneProps, BuhtaTa
                 if (target.kol > 0)
                     targetKolStr = "  (" + target.kol + " мест.)";
 
-                let active=<img src="img/tick.png" height="20" width="20"/>;
+                let active =<img src="img/tick.png" height="20" width="20"/>;
                 if (target.isActive !== true)
                     active = <div></div>;
 
                 ret.push(
-                    <div iconRight key={index} button onPress={()=>{this.state.handleTargetPlaceClick(index)}}>
-                        <span>
-                            <img src="img/pallete.png" />  {target.name}{targetKolStr}
-                        </span>
-                        {active}
-                    </div>
+                    <tr onTouchEnd={()=>{this.state.handleTargetPlaceClick(index); navigator.vibrate(100);}}>
+                        <td> {active}</td>
+                        <td><img src="img/pallete.png"/></td>
+                        <td style={{paddingLeft: 5}}>{target.name}{targetKolStr}</td>
+                    </tr>
+
+                    // ret.push(
+                    //     <div iconRight key={index} button onPress={()=>{this.state.handleTargetPlaceClick(index)}}>
+                    //         <span>
+                    //             <img src="img/pallete.png" />  {target.name}{targetKolStr}
+                    //         </span>
+                    //         {active}
+                    //     </div>
 
                 );
             }, this);
@@ -627,7 +633,9 @@ export class BuhtaTaskScene extends BuhtaCoreScene<IBuhtaTaskSceneProps, BuhtaTa
                 <div className="task-steps-title">
                     <span>{this.props.taskConfig.targetPlacesConfig!.title.toUpperCase()}</span>
                 </div>
-                {ret}
+                <table className="task-targets">
+                    <tbody>{ret}</tbody>
+                </table>
             </div>
         );
     }

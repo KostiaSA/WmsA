@@ -1,23 +1,31 @@
-
 //import * as tts_ from "react-native-android-speech"
 //let tts = tts_ as any;
 
-let tts:any={};
 
 function speak(text: string) {
-    console.log(tts);
+    let tts: any = window["TTS" as any] as any;
+
     tts.speak({
-        text: text, // Mandatory
-        pitch: 1.2, // Optional Parameter to set the pitch of Speech,
-        forceStop: false, //  Optional Parameter if true , it will stop TTS if it is already in process
-        language: "ru" // Optional Paramenter Default is en you can provide any supported lang by TTS
-    }).then((isSpeaking: boolean)=> {
-        //Success Callback
-        console.log(isSpeaking);
-    }).catch((error: any)=> {
-        //Errror Callback
-        console.log(error)
+        text: text,
+        locale: 'ru-RU',
+        rate: 1.5
+    }, function () {
+        //alert('success');
+    }, function (reason: any) {
+        alert(reason);
     });
+    // console.log(tts);
+    // tts.speak({
+    //     text: text,
+    //     rate: 1.5,
+    //     locale: 'ru-RU'
+    // }).then((isSpeaking: boolean)=> {
+    //     //Success Callback
+    //     console.log(isSpeaking);
+    // }).catch((error: any)=> {
+    //     //Errror Callback
+    //     console.log(error)
+    // });
 
 }
 
@@ -28,3 +36,13 @@ export function pushSpeak(text: string) {
     speak(text);
 }
 
+// (window["TTS" as any] as any)
+//     .speak({
+//         text: 'Р’С‹ СЃР»СѓС€Р°РµС‚Рµ СЃРёРЅС‚РµР· СЂРµС‡Рё РЅР° СЂСѓСЃСЃРєРѕРј СЏР·С‹РєРµ',
+//         locale: 'ru-RU',
+//         rate: 0.75
+//     }, function () {
+//         //alert('success');
+//     }, function (reason: any) {
+//         alert(reason);
+//     });

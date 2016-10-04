@@ -27,6 +27,12 @@
         },
         "cordova-plugin-console": {
             "PACKAGE_NAME": "ru.buhta.wms"
+        },
+        "cordova-plugin-tts": {
+            "PACKAGE_NAME": "ru.buhta.wms"
+        },
+        "cordova-plugin-x-toast": {
+            "PACKAGE_NAME": "ru.buhta.wms"
         }
     },
     "dependent_plugins": {},
@@ -243,6 +249,27 @@
             "clobbers": [
                 "CordovaHttpPlugin"
             ]
+        },
+        {
+            "file": "plugins/cordova-plugin-tts/www/tts.js",
+            "id": "cordova-plugin-tts.tts",
+            "pluginId": "cordova-plugin-tts",
+            "clobbers": [
+                "TTS"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-x-toast/www/Toast.js",
+            "id": "cordova-plugin-x-toast.Toast",
+            "pluginId": "cordova-plugin-x-toast",
+            "clobbers": [
+                "window.plugins.toast"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-x-toast/test/tests.js",
+            "id": "cordova-plugin-x-toast.tests",
+            "pluginId": "cordova-plugin-x-toast"
         }
     ],
     "plugin_metadata": {
@@ -252,6 +279,8 @@
         "cordova-plugin-compat": "1.0.0",
         "cordova-plugin-file": "4.3.0",
         "cordova-plugin-http": "1.2.0",
-        "cordova-plugin-console": "1.0.4"
+        "cordova-plugin-console": "1.0.4",
+        "cordova-plugin-tts": "0.2.3",
+        "cordova-plugin-x-toast": "2.5.2"
     }
 }

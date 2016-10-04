@@ -1,6 +1,7 @@
 import {IMessage} from "../interfaces/IMessage";
 import {IMessageParams} from "../interfaces/IMessageParams";
 import {pushSpeak} from "./speak";
+import {toastShow} from "./toast";
 //var Sound = require('react-native-sound') as any;
 //import {ToastAndroid} from "react-native";
 
@@ -44,9 +45,9 @@ export function runMessage(message: IMessage, params?: IMessageParams) {
         }
     }
 
-    // if (message.toast !== undefined) {
-    //     ToastAndroid.show(message.toast, ToastAndroid.LONG);
-    // }
+    if (message.toast !== undefined) {
+        toastShow(message.toast);
+    }
     //
     // if (message.sound !== undefined && message.voice !== undefined) {
     //     var sound = new Sound(message.sound, Sound.MAIN_BUNDLE, (error: any) => {

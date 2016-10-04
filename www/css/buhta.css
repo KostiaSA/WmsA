@@ -28,3 +28,11 @@
 .task-step-value {
     color: gray;
 }
+
+.task-targets td {
+    vertical-align: middle;
+}
+
+.task-targets tr:active {
+    background-color: #dedede;
+}
