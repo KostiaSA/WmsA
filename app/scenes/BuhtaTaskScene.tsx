@@ -30,8 +30,8 @@ import {getInstantPromise} from "../core/getInstantPromise";
 import {IMessage} from "../interfaces/IMessage";
 import {stringAsSql} from "../core/SqlCore";
 import {РЕГИСТР_ПАЛЛЕТА_В_ЗАДАНИИ, РЕГИСТР_ЗАДАНИЕ_НА_ПРИЕМКУ} from "../constants/registers";
-import {List, ListItem} from "react-onsenui";
 
+import {Button, ListItem, Ripple } from "react-onsenui";
 
 //let Text = Text_ as any;
 
@@ -309,8 +309,8 @@ export class BuhtaTaskSceneState extends BuhtaCoreSceneState<IBuhtaTaskSceneProp
     }
 
     handleTargetPlaceClick(placeIndex: number) {
-        this.targetPlaces.forEach((item:ITaskSourceTargetPlaceState)=>item.isActive=false);
-        this.targetPlaces[placeIndex].isActive=true;
+        this.targetPlaces.forEach((item: ITaskSourceTargetPlaceState)=>item.isActive = false);
+        this.targetPlaces[placeIndex].isActive = true;
         this.scene.forceUpdate();
         pushSpeak("выбрана палета 12" + placeIndex + ".");
     }
@@ -448,8 +448,9 @@ export class TaskStep_Приемка extends TaskStep {
                     <td>
                         <span className="task-step-caption">товар</span>
                     </td>
-                    <td>
-                        <span className="task-step-value" style={{ color:"slategray"}}>{this.objectName}</span>
+                    <td onClick={()=>{navigator.vibrate(100);}}>
+                        <span className="task-step-value" style={{ color:"slategray"}} >{this.objectName}</span>
+                        <Ripple background="lightgray"/>
                     </td>
                 </tr>
                 <tr>

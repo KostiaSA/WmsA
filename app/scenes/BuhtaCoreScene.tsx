@@ -211,21 +211,21 @@ export class BuhtaCoreScene<TProps extends IBuhtaCoreSceneProps,TState extends B
         // });
     }
 
-    renderContent(): JSX.Element {
-        return <div>**content**</div>;
-        // if (this.navigatorAnimationIsDone === true) {
-        //     return (
-        //         <Content>
-        //             {this.props.children}
-        //         </Content>
-        //     );
-        // }
-        // else
-        //     return (
-        //         <Content>
-        //         </Content>
-        //     );
-    }
+    // renderContent(): JSX.Element {
+    //     return <div>**content**</div>;
+    //     // if (this.navigatorAnimationIsDone === true) {
+    //     //     return (
+    //     //         <Content>
+    //     //             {this.props.children}
+    //     //         </Content>
+    //     //     );
+    //     // }
+    //     // else
+    //     //     return (
+    //     //         <Content>
+    //     //         </Content>
+    //     //     );
+    // }
 
 
     renderToolbar = (): JSX.Element => {
