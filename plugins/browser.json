@@ -1,0 +1,34 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "ru.buhta.wms"
+        },
+        "cordova-plugin-vibration": {
+            "PACKAGE_NAME": "ru.buhta.wms"
+        },
+        "cordova-plugin-cipherlab-rs30": {
+            "PACKAGE_NAME": "ru.buhta.wms"
+        },
+        "cordova-plugin-http": {
+            "PACKAGE_NAME": "ru.buhta.wms"
+        },
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "ru.buhta.wms"
+        }
+    },
+    "dependent_plugins": {
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "ru.buhta.wms"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "ru.buhta.wms"
+        }
+    }
+}

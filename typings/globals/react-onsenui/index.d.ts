@@ -1,0 +1,41 @@
+declare module "react-onsenui" {
+    declare var Ons: any;
+    declare var AlertDialog: any;
+    declare var BackButton: any;
+    declare var BottomToolbar: any;
+    declare var Button: any;
+    declare var Carousel: any;
+    declare var CarouselItem: any;
+    declare var Col: any;
+    declare var Dialog: any;
+    declare var Fab: any;
+    declare var Icon: any;
+    declare var Input: any;
+    declare var LazyList: any;
+    declare var List: any;
+    declare var ListHeader: any;
+    declare var ListItem: any;
+    declare var Navigator: any;
+    declare var Modal: any;
+    declare var Page: any;
+    declare var Popover: any;
+    declare var ProgressBar: any;
+    declare var ProgressCircular: any;
+    declare var PullHook: any;
+    declare var Range: any;
+    declare var Ripple: any;
+    declare var Row: any;
+    declare var SpeedDial: any;
+    declare var SpeedDialItem: any;
+    declare var Splitter: any;
+    declare var SplitterContent: any;
+    declare var SplitterSide: any;
+    declare var Switch: any;
+    declare var Tab: any;
+    declare var TabActive: any;
+    declare var TabInactive: any;
+    declare var Tabbar: any;
+    declare var Toolbar: any;
+    declare var ToolbarButton: any;
+
+}

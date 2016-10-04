@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": true,
+    "noEmitOnError": true,
+    "removeComments": false,
+    "sourceMap": true,
+    "target": "es5",
+    //"outDir": "../distdist",
+    "declaration": false,
+    "module": "commonjs",
+    "jsx": "react",
+    "experimentalDecorators":true,
+    "strictNullChecks":true,
+    //    "reactNamespace": "__React"
+    "lib": ["es6", "es2015.proxy","es2015.promise","dom"],
+    "skipLibCheck": true
+
+  },
+  "exclude": [
+    "node_modules",
+    ".js"
+    //"**/*x.d.ts"
+  ]
+}
