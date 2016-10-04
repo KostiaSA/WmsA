@@ -4,7 +4,7 @@ import * as React from "react";
 import {stringAsSql} from "../core/SqlCore";
 import {getDb} from "../core/getDb";
 import {DataTable} from "../core/SqlDb";
-import {Button, Page, BackButton, Toolbar} from "react-onsenui";
+import {Button, Page, BackButton, Toolbar, ToolbarButton} from "react-onsenui";
 //import BarcodeScannerView from "react-native-barcodescanner";
 //import {getNavigatorNoTransition} from "../core/getNavigatorNoTransition";
 
@@ -24,7 +24,7 @@ export interface IBuhtaCoreSceneProps extends React.ClassAttributes<any> {
     onGetVoiceText?: (text: string)=>void;
     onContextMenu?: ()=>void;
 
-    modifier?:any;
+    modifier?: any;
 }
 
 export class BuhtaCoreSceneState<TProps extends IBuhtaCoreSceneProps> {
@@ -159,36 +159,45 @@ export class BuhtaCoreScene<TProps extends IBuhtaCoreSceneProps,TState extends B
     }
 
     renderBarcodeButton(): JSX.Element | null {
-
-        // if (this.state.barcodeButtonVisible)
+         if (this.state.barcodeButtonVisible)
+             return (
+                 <ToolbarButton onClick={this.handleBarcodeButtonPress}>
+                     <i className="fa fa-barcode"></i>
+                 </ToolbarButton>
+             );
         //     return (
         //         <Button transparent onPress={this.handleBarcodeButtonPress}>
         //             <Icon style={{fontSize: 18, color: "white"}} name="barcode"/>
         //         </Button>
         //     );
-        // else
-            return null;
+         else
+        return null;
     }
 
     renderVoiceButton(): JSX.Element | null {
-        // if (this.state.voiceButtonVisible)
+        if (this.state.voiceButtonVisible)
+            return (
+                <ToolbarButton onClick={this.handleVoiceButtonPress}>
+                    <i className="fa fa-microphone"></i>
+                </ToolbarButton>
+            );
         //     return (
         //         <Button transparent onPress={this.handleVoiceButtonPress}>
         //             <Icon style={{fontSize: 18, color: "white"}} name="microphone"/>
         //         </Button>
         //     );
-        // else
-            return null;
+         else
+        return null;
     }
 
     renderContextMenuButton(): JSX.Element | null {
-        // if (this.state.contextMenuButtonVisible)
-        //     return (
-        //         <Button transparent onPress={this.handleContextMenuButtonPress}>
-        //             <Icon style={{fontSize: 18, color: "white"}} name="bars"/>
-        //         </Button>
-        //     );
-        // else
+        if (this.state.contextMenuButtonVisible)
+            return (
+                <ToolbarButton onClick={this.handleContextMenuButtonPress}>
+                    <i className="fa fa-bars"></i>
+                </ToolbarButton>
+            );
+        else
             return null;
     }
 
@@ -227,7 +236,9 @@ export class BuhtaCoreScene<TProps extends IBuhtaCoreSceneProps,TState extends B
                 </div>
                 <div className="center">{this.props.title}</div>
                 <div className="right">
-                    <Button modifier={this.props.modifier}>OPT</Button>
+                    {this.renderBarcodeButton()}
+                    {this.renderVoiceButton()}
+                    {this.renderContextMenuButton()}
                 </div>
             </Toolbar>
         );
