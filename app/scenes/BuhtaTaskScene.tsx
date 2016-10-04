@@ -432,9 +432,6 @@ export class TaskStep_Приемка extends TaskStep {
 
 
     renderIncompleteStep(): JSX.Element {
-
-        //let captionStyle = {color: "gray", fontSize: "15px", verticalAlign: "top"};
-        //let actionStyle = {color: "coral", fontSize: "15px"};
         return (
             <table className="task-step" style={{borderBottom:"1px solid silver"}}>
                 <tr>
@@ -537,7 +534,7 @@ export class BuhtaTaskScene extends BuhtaCoreScene<IBuhtaTaskSceneProps, BuhtaTa
     }
 
     renderIncompleteSteps(): JSX.Element {
-        //return <div>renderIncompleteSteps</div>;
+        
         let steps = this.state.steps.map((step: TaskStep, index: number)=> {
             return (
                 <div key={index}>
@@ -573,74 +570,63 @@ export class BuhtaTaskScene extends BuhtaCoreScene<IBuhtaTaskSceneProps, BuhtaTa
     }
 
 
-    // renderTest = (): JSX.Element[]=> {
-    //     let ret: JSX.Element[] = [];
-    //     for (let i = 0; i < 1; i++) {
-    //         ret.push(
-    //             <ListItem key={i}>
-    //                 <Text>Паллета {i} бля</Text>
-    //             </ListItem>
-    //         );
-    //     }
-    //     return ret;
-    // }
-
 
     renderTargets = (): JSX.Element | null => {
-        return <div>renderTargets</div>;
-        // let ret: JSX.Element[] = [];
-        //
-        // if (!this.state.isStepsLoaded)
-        //     return (
-        //         <ListItem iconRight button onPress={()=>{this.state.handleTargetPlaceClick(0)}}>
-        //             <Text>загрузка...</Text>
-        //         </ListItem>
-        //     );
-        //
-        // if (this.state.targetPlaces.length === 0) {
-        //     if (this.props.taskConfig.targetPlacesConfig === undefined || this.props.taskConfig.targetPlacesConfig.allowedCount === "none") {
-        //         return null;
-        //     }
-        //     else {
-        //         ret.push(
-        //             <ListItem iconRight button onPress={()=>{this.state.handleTargetPlaceClick(0)}}>
-        //                 <Text>{this.props.taskConfig.targetPlacesConfig.placesNotReadyText}</Text>
-        //                 <Icon name="bullseye" style={{fontSize: 20, color: "red"}}/>
-        //             </ListItem>
-        //         );
-        //     }
-        // }
-        // else {
-        //     this.state.targetPlaces.forEach((target: ITaskSourceTargetPlaceState, index: number)=> {
-        //
-        //         let iconColor = "transparent";
-        //         if (target.isActive === true)
-        //             iconColor = "green";
-        //
-        //         let targetKolStr = "  (пустая)";
-        //         if (target.kol > 0)
-        //             targetKolStr = "  (" + target.kol + " мест.)";
-        //
-        //         ret.push(
-        //             <ListItem iconRight key={index} button onPress={()=>{this.state.handleTargetPlaceClick(index)}}>
-        //
-        //                 <Text><Image source={require("../img/pallete.png")}/>  {target.name}{targetKolStr}</Text>
-        //                 <Icon name="bullseye" style={{fontSize: 20, color: iconColor}}/>
-        //             </ListItem>
-        //
-        //         );
-        //     }, this);
-        // }
-        //
-        // return (
-        //     <List>
-        //         <ListItem itemDivider>
-        //             <Text
-        //                 style={{ color:"dimgray"}}>{this.props.taskConfig.targetPlacesConfig!.title.toUpperCase()}</Text>
-        //         </ListItem>
-        //         {ret}
-        //     </List>
-        // );
+        //return <div>renderTargets</div>;
+        let ret: JSX.Element[] = [];
+
+        if (!this.state.isStepsLoaded)
+            return (
+                <div iconRight button onPress={()=>{this.state.handleTargetPlaceClick(0)}}>
+                    <span>загрузка...</span>
+                </div>
+            );
+
+        if (this.state.targetPlaces.length === 0) {
+            if (this.props.taskConfig.targetPlacesConfig === undefined || this.props.taskConfig.targetPlacesConfig.allowedCount === "none") {
+                return null;
+            }
+            else {
+                ret.push(
+                    <div iconRight button onPress={()=>{this.state.handleTargetPlaceClick(0)}}>
+                        <span>{this.props.taskConfig.targetPlacesConfig.placesNotReadyText}</span>
+                        <img name="bullseye" style={{fontSize: 20, color: "red"}}/>
+                    </div>
+                );
+            }
+        }
+        else {
+            this.state.targetPlaces.forEach((target: ITaskSourceTargetPlaceState, index: number)=> {
+
+                let iconColor = "transparent";
+                if (target.isActive === true)
+                    iconColor = "green";
+
+                let targetKolStr = "  (пустая)";
+                if (target.kol > 0)
+                    targetKolStr = "  (" + target.kol + " мест.)";
+
+                ret.push(
+                    <div iconRight key={index} button onPress={()=>{this.state.handleTargetPlaceClick(index)}}>
+
+                        <span>
+                            <img src="img/pallete.png"/>  {target.name}{targetKolStr}
+                        </span>
+                        <img name="bullseye" style={{fontSize: 20, color: iconColor}}/>
+                    </div>
+
+                );
+            }, this);
+        }
+
+        return (
+            <div>
+                <div itemDivider>
+                    <span style={{ color:"dimgray"}}>{this.props.taskConfig.targetPlacesConfig!.title.toUpperCase()}</span>
+                </div>
+                {ret}
+            </div>
+        );
     }
 
     render() {
