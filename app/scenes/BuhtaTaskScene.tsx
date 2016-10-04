@@ -534,7 +534,7 @@ export class BuhtaTaskScene extends BuhtaCoreScene<IBuhtaTaskSceneProps, BuhtaTa
     }
 
     renderIncompleteSteps(): JSX.Element {
-        
+
         let steps = this.state.steps.map((step: TaskStep, index: number)=> {
             return (
                 <div key={index}>
@@ -598,21 +598,24 @@ export class BuhtaTaskScene extends BuhtaCoreScene<IBuhtaTaskSceneProps, BuhtaTa
         else {
             this.state.targetPlaces.forEach((target: ITaskSourceTargetPlaceState, index: number)=> {
 
-                let iconColor = "transparent";
-                if (target.isActive === true)
-                    iconColor = "green";
+                // let iconColor = "transparent";
+                // if (target.isActive === true)
+                //     iconColor = "green";
 
                 let targetKolStr = "  (пустая)";
                 if (target.kol > 0)
                     targetKolStr = "  (" + target.kol + " мест.)";
 
+                let active=<img src="img/tick.png" height="20" width="20"/>;
+                if (target.isActive !== true)
+                    active = <div></div>;
+
                 ret.push(
                     <div iconRight key={index} button onPress={()=>{this.state.handleTargetPlaceClick(index)}}>
-
                         <span>
-                            <img src="img/pallete.png"/>  {target.name}{targetKolStr}
+                            <img src="img/pallete.png" />  {target.name}{targetKolStr}
                         </span>
-                        <img name="bullseye" style={{fontSize: 20, color: iconColor}}/>
+                        {active}
                     </div>
 
                 );
@@ -621,8 +624,8 @@ export class BuhtaTaskScene extends BuhtaCoreScene<IBuhtaTaskSceneProps, BuhtaTa
 
         return (
             <div>
-                <div itemDivider>
-                    <span style={{ color:"dimgray"}}>{this.props.taskConfig.targetPlacesConfig!.title.toUpperCase()}</span>
+                <div className="task-steps-title">
+                    <span>{this.props.taskConfig.targetPlacesConfig!.title.toUpperCase()}</span>
                 </div>
                 {ret}
             </div>
