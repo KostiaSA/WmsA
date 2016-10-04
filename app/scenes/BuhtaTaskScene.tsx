@@ -309,8 +309,10 @@ export class BuhtaTaskSceneState extends BuhtaCoreSceneState<IBuhtaTaskSceneProp
     }
 
     handleTargetPlaceClick(placeIndex: number) {
+        this.targetPlaces.forEach((item:ITaskSourceTargetPlaceState)=>item.isActive=false);
+        this.targetPlaces[placeIndex].isActive=true;
+        this.scene.forceUpdate();
         pushSpeak("выбрана палета 12" + placeIndex + ".");
-        //alert(placeIndex);
     }
 
     isStepsLoaded: boolean;
