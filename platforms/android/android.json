@@ -47,6 +47,10 @@
                         {
                             "xml": "<feature name=\"SpeechRecognition\"><param name=\"android-package\" value=\"org.apache.cordova.speech.SpeechRecognition\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Accelerometer\"><param name=\"android-package\" value=\"org.apache.cordova.devicemotion.AccelListener\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -156,6 +160,12 @@
             "PACKAGE_NAME": "ru.buhta.wms"
         },
         "org.apache.cordova.speech.speechrecognition": {
+            "PACKAGE_NAME": "ru.buhta.wms"
+        },
+        "cordova-plugin-device-motion": {
+            "PACKAGE_NAME": "ru.buhta.wms"
+        },
+        "cordova-plugin-shake": {
             "PACKAGE_NAME": "ru.buhta.wms"
         }
     },
@@ -467,6 +477,30 @@
             "clobbers": [
                 "SpeechGrammarList"
             ]
+        },
+        {
+            "id": "cordova-plugin-device-motion.Acceleration",
+            "file": "plugins/cordova-plugin-device-motion/www/Acceleration.js",
+            "pluginId": "cordova-plugin-device-motion",
+            "clobbers": [
+                "Acceleration"
+            ]
+        },
+        {
+            "id": "cordova-plugin-device-motion.accelerometer",
+            "file": "plugins/cordova-plugin-device-motion/www/accelerometer.js",
+            "pluginId": "cordova-plugin-device-motion",
+            "clobbers": [
+                "navigator.accelerometer"
+            ]
+        },
+        {
+            "id": "cordova-plugin-shake.Shake",
+            "file": "plugins/cordova-plugin-shake/www/shake.js",
+            "pluginId": "cordova-plugin-shake",
+            "clobbers": [
+                "shake"
+            ]
         }
     ],
     "plugin_metadata": {
@@ -481,6 +515,8 @@
         "cordova-plugin-x-toast": "2.5.2",
         "phonegap-plugin-barcodescanner": "6.0.2",
         "cordova-plugin-media": "2.4.0",
-        "org.apache.cordova.speech.speechrecognition": "0.1.1"
+        "org.apache.cordova.speech.speechrecognition": "0.1.1",
+        "cordova-plugin-device-motion": "1.2.2",
+        "cordova-plugin-shake": "0.5.4"
     }
 }

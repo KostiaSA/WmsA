@@ -31,7 +31,8 @@ import {IMessage} from "../interfaces/IMessage";
 import {stringAsSql} from "../core/SqlCore";
 import {РЕГИСТР_ПАЛЛЕТА_В_ЗАДАНИИ, РЕГИСТР_ЗАДАНИЕ_НА_ПРИЕМКУ} from "../constants/registers";
 
-import {Button, ListItem, Ripple } from "react-onsenui";
+import {Button, ListItem, Ripple} from "react-onsenui";
+import {showToast} from "../core/toast";
 
 //let Text = Text_ as any;
 
@@ -176,6 +177,7 @@ export class BuhtaTaskSceneState extends BuhtaCoreSceneState<IBuhtaTaskSceneProp
                 runMessage(СООБЩЕНИЕ_ОШИБКА);
             });
     }
+
 
     handleSubcontoScan(subcontos: ISubconto[]): Promise<void> {
 
@@ -449,7 +451,7 @@ export class TaskStep_Приемка extends TaskStep {
                         <span className="task-step-caption">товар</span>
                     </td>
                     <td onClick={()=>{navigator.vibrate(100);}}>
-                        <span className="task-step-value" style={{ color:"slategray"}} >{this.objectName}</span>
+                        <span className="task-step-value" style={{ color:"slategray"}}>{this.objectName}</span>
                         <Ripple background="lightgray"/>
                     </td>
                 </tr>
@@ -643,10 +645,17 @@ export class BuhtaTaskScene extends BuhtaCoreScene<IBuhtaTaskSceneProps, BuhtaTa
         );
     }
 
+     onShake() {
+         this.coreScene.handleShake();
+     }
+
+    coreScene:BuhtaCoreScene<any,any>;
+
     render() {
         console.log("render TaskScene");
         return (
             <BuhtaCoreScene
+                ref={(e:any)=>{this.coreScene=e;}}
                 navigator={this.props.navigator}
                 title={"Задание "+this.props.taskId}
                 onGetBarcode={(barcode: string, type: string)=>{ this.state.handleBarcodeScan(barcode);}}

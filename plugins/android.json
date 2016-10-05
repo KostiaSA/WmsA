@@ -36,6 +36,9 @@
         },
         "org.apache.cordova.speech.speechrecognition": {
             "PACKAGE_NAME": "ru.buhta.wms"
+        },
+        "cordova-plugin-shake": {
+            "PACKAGE_NAME": "ru.buhta.wms"
         }
     },
     "dependent_plugins": {
@@ -43,6 +46,9 @@
             "PACKAGE_NAME": "ru.buhta.wms"
         },
         "cordova-plugin-file": {
+            "PACKAGE_NAME": "ru.buhta.wms"
+        },
+        "cordova-plugin-device-motion": {
             "PACKAGE_NAME": "ru.buhta.wms"
         }
     }

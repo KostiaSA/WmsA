@@ -1,0 +1,38 @@
+
+.task-steps-title {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 15px;
+    background-color: #a9a9a9;
+    color: white;
+    padding: 7px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.task-step {
+    font-size: 15px;
+    borderBottom: 1px solid silver;
+}
+
+.task-step td {
+    vertical-align: top;
+}
+
+.task-step-caption {
+    color: gray;
+    white-space: nowrap;
+    padding-right: 4px;
+}
+
+.task-step-value {
+    color: gray;
+}
+
+.task-targets td {
+    vertical-align: middle;
+}
+
+.task-targets tr:active {
+    background-color: #dedede;
+}

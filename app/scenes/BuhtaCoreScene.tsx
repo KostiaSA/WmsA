@@ -4,7 +4,7 @@ import * as React from "react";
 import {stringAsSql} from "../core/SqlCore";
 import {getDb} from "../core/getDb";
 import {DataTable} from "../core/SqlDb";
-import {Button, Page, BackButton, Toolbar, ToolbarButton, Dialog,Icon} from "react-onsenui";
+import {Button, Page, BackButton, Toolbar, ToolbarButton, Dialog, Icon} from "react-onsenui";
 //import BarcodeScannerView from "react-native-barcodescanner";
 //import {getNavigatorNoTransition} from "../core/getNavigatorNoTransition";
 
@@ -26,7 +26,6 @@ export interface IBuhtaCoreSceneProps extends React.ClassAttributes<any> {
     onGetBarcode?: (barcode: string, type: string)=>void;
     onGetVoiceText?: (text: string)=>void;
     onContextMenu?: ()=>void;
-
     modifier?: any;
 }
 
@@ -91,7 +90,6 @@ export class BuhtaCoreScene<TProps extends IBuhtaCoreSceneProps,TState extends B
     }
 
     handleVoiceButtonPress = () => {
-
         this.openVoiceScanner(this.props.navigator)
             .then((text: string) => {
                 if (this.props.onGetVoiceText !== undefined)
@@ -102,6 +100,17 @@ export class BuhtaCoreScene<TProps extends IBuhtaCoreSceneProps,TState extends B
     handleContextMenuButtonPress = () => {
         if (this.props.onContextMenu !== undefined)
             this.props.onContextMenu();
+    }
+
+    onShake() {
+        // не удалять
+    }
+
+    handleShake() {
+        if (_.isFunction(this.props.onGetVoiceText)) {
+            navigator.vibrate(100);
+            this.handleVoiceButtonPress();
+        }
     }
 
     openCameraScanner(navigator: Navigator): Promise<{barcode: string,type: string}> {
@@ -133,35 +142,12 @@ export class BuhtaCoreScene<TProps extends IBuhtaCoreSceneProps,TState extends B
                 this.state.isVoiceDialogShown = false;
                 this.forceUpdate();
                 showToast(text);
+                return text;
             })
             .catch((err: string)=> {
                 this.state.isVoiceDialogShown = false;
                 this.forceUpdate();
             });
-        //throw "openVoiceScanner"
-        // return new Promise<string>(
-        //     (resolve: (text: string) => void, reject: (error: string) => void) => {
-        //
-        //         let sceneProps: IBuhtaVoiceScannerSceneProps = {
-        //             navigator: navigator,
-        //             onVoiceScanned: (text: string)=> {
-        //                 this.state.scannedVoiceText = text;
-        //                 resolve(text);
-        //                 // this.state.findSubcontoByBarcode()
-        //                 //     .then(()=> {
-        //                 //         resolve({barcode, type});
-        //                 //     });
-        //             }
-        //         }
-        //
-        //         let route: Route = {
-        //             component: BuhtaVoiceScannerScene,
-        //             passProps: sceneProps,
-        //             sceneConfig: getNavigatorNoTransition()
-        //         };
-        //         navigator.push(route);
-        //     });
-
 
     }
 
@@ -182,12 +168,14 @@ export class BuhtaCoreScene<TProps extends IBuhtaCoreSceneProps,TState extends B
     }
 
     renderVoiceButton(): JSX.Element | null {
-        if (this.state.voiceButtonVisible)
+        if (this.state.voiceButtonVisible) {
+
             return (
                 <ToolbarButton onClick={this.handleVoiceButtonPress}>
                     <i className="fa fa-microphone"></i>
                 </ToolbarButton>
             );
+        }
         //     return (
         //         <Button transparent onPress={this.handleVoiceButtonPress}>
         //             <Icon style={{fontSize: 18, color: "white"}} name="microphone"/>
@@ -262,7 +250,7 @@ export class BuhtaCoreScene<TProps extends IBuhtaCoreSceneProps,TState extends B
                     isCancelable={true}
                     onCancel={()=>{this.state.isVoiceDialogShown=false}}>
                     <div style={{textAlign: 'center', margin: '20px'}}>
-                        <Icon icon="microphone" size={30}> </Icon>
+                        <Icon icon="microphone" size={40}> </Icon>
                         <p>Произнесите команду!</p>
                         <p>
                             <Button onClick={()=>{this.state.isVoiceDialogShown=false;this.forceUpdate()}}>
