@@ -4,7 +4,7 @@ import {BuhtaCoreScene, IBuhtaCoreSceneProps, BuhtaCoreSceneState} from "./Buhta
 import {BuhtaTaskSceneState} from "./BuhtaTaskScene";
 import {ITaskSpecConfig} from "../config/Tasks";
 import {IRoute} from "../interfaces/IRoute";
-import {Button, ListItem, List} from "react-onsenui";
+import {ListItem, List} from "react-onsenui";
 import {navigatorView} from "../App";
 
 export interface IBuhtaTaskContextMenuSceneProps extends IBuhtaCoreSceneProps {
@@ -25,7 +25,7 @@ export class BuhtaTaskContextMenuScene extends BuhtaCoreScene<IBuhtaTaskContextM
                 title: spec.contextMenuSceneTitle,
                 taskState: this.props.taskSceneState,
                 taskSpecConfig: spec
-            }
+            };
 
             let route: IRoute = {
                 component: spec.contextMenuScene,
@@ -33,7 +33,7 @@ export class BuhtaTaskContextMenuScene extends BuhtaCoreScene<IBuhtaTaskContextM
             };
             navigatorView.pushPage(route, {animation: "slide"});
         }
-    }
+    };
 
     renderRow = (spec: ITaskSpecConfig, index: number): JSX.Element => {
         return (
@@ -41,7 +41,7 @@ export class BuhtaTaskContextMenuScene extends BuhtaCoreScene<IBuhtaTaskContextM
                 <span>{spec.taskSpecName}</span>
             </ListItem>
         );
-    }
+    };
 
     render() {
 

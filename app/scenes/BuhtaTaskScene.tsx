@@ -647,11 +647,11 @@ export class BuhtaTaskScene extends BuhtaCoreScene<IBuhtaTaskSceneProps, BuhtaTa
         );
     }
 
-     onShake() {
-         this.coreScene.handleShake();
-     }
+    onShake() {
+        this.coreScene.handleShake();
+    }
 
-    coreScene:BuhtaCoreScene<any,any>;
+    coreScene: BuhtaCoreScene<any,any>;
 
     render() {
         console.log("render TaskScene");
