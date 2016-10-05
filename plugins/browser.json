@@ -33,6 +33,9 @@
         },
         "cordova-plugin-media": {
             "PACKAGE_NAME": "ru.buhta.wms"
+        },
+        "org.apache.cordova.speech.speechrecognition": {
+            "PACKAGE_NAME": "ru.buhta.wms"
         }
     },
     "dependent_plugins": {

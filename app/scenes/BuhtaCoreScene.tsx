@@ -4,7 +4,7 @@ import * as React from "react";
 import {stringAsSql} from "../core/SqlCore";
 import {getDb} from "../core/getDb";
 import {DataTable} from "../core/SqlDb";
-import {Button, Page, BackButton, Toolbar, ToolbarButton} from "react-onsenui";
+import {Button, Page, BackButton, Toolbar, ToolbarButton, Dialog,Icon} from "react-onsenui";
 //import BarcodeScannerView from "react-native-barcodescanner";
 //import {getNavigatorNoTransition} from "../core/getNavigatorNoTransition";
 
@@ -13,6 +13,9 @@ import {throwError} from "../core/Error";
 import {ITaskConfig} from "../config/Tasks";
 import {NavigatorView} from "onsenui";
 import {navigatorView} from "../App";
+import {getInstantPromise} from "../core/getInstantPromise";
+import {speechRecognition} from "../core/speechRecognition";
+import {showToast} from "../core/toast";
 
 //let voice = Voice as any;
 
@@ -42,6 +45,8 @@ export class BuhtaCoreSceneState<TProps extends IBuhtaCoreSceneProps> {
     barcodeButtonVisible: boolean;
     voiceButtonVisible: boolean;
     contextMenuButtonVisible: boolean;
+
+    isVoiceDialogShown: boolean;
 
     scannedBarcode: string;
     scannedBarcodeType: string;
@@ -105,14 +110,9 @@ export class BuhtaCoreScene<TProps extends IBuhtaCoreSceneProps,TState extends B
 
                 (cordova.plugins as any).barcodeScanner.scan(
                     (result: {text: string,format: string,cancelled: any})=> {
-                        // alert("We got a barcode\n" +
-                        //     "Result: " + result.text + "\n" +
-                        //     "Format: " + result.format + "\n" +
-                        //     "Cancelled: " + result.cancelled);
-                        resolve({barcode:result.text,type:result.format})
+                        resolve({barcode: result.text, type: result.format})
                     },
                     (error: any) => {
-//                        alert("Scanning failed: " + error);
                         reject(error.toString());
                     },
                     {
@@ -122,39 +122,23 @@ export class BuhtaCoreScene<TProps extends IBuhtaCoreSceneProps,TState extends B
                         // "formats" : "QR_CODE,PDF_417", // default: all but PDF_417 and RSS_EXPANDED
                         "orientation": "portrait" // Android only (portrait|landscape), default unset so it rotates with the device
                     });
-
             });
-
-
-
-        // return new Promise<{barcode: string,type: string}>(
-        //     (resolve: (result: {barcode: string,type: string}) => void, reject: (error: string) => void) => {
-        //
-        //         let sceneProps: IBuhtaBarcodeScannerSceneProps = {
-        //             navigator: navigator,
-        //             onBarcodeScanned: (barcode: string, type: string)=> {
-        //                 this.state.scannedBarcode = barcode;
-        //                 this.state.scannedBarcodeType = type;
-        //                 this.state.findSubcontoByBarcode()
-        //                     .then(()=> {
-        //                         resolve({barcode, type});
-        //                     });
-        //             }
-        //         }
-        //
-        //         let route: Route = {
-        //             component: BuhtaBarcodeScannerScene,
-        //             passProps: sceneProps,
-        //             sceneConfig: getNavigatorNoTransition()
-        //         };
-        //         navigator.push(route);
-        //     });
-
-
     }
 
     openVoiceScanner(navigator: Navigator): Promise<string> {
-        throw "openVoiceScanner"
+        this.state.isVoiceDialogShown = true;
+        this.forceUpdate();
+        return speechRecognition()
+            .then((text: string)=> {
+                this.state.isVoiceDialogShown = false;
+                this.forceUpdate();
+                showToast(text);
+            })
+            .catch((err: string)=> {
+                this.state.isVoiceDialogShown = false;
+                this.forceUpdate();
+            });
+        //throw "openVoiceScanner"
         // return new Promise<string>(
         //     (resolve: (text: string) => void, reject: (error: string) => void) => {
         //
@@ -272,6 +256,21 @@ export class BuhtaCoreScene<TProps extends IBuhtaCoreSceneProps,TState extends B
         return (
             <Page renderToolbar={this.renderToolbar}>
                 {this.props.children}
+
+                <Dialog
+                    isOpen={this.state.isVoiceDialogShown===true}
+                    isCancelable={true}
+                    onCancel={()=>{this.state.isVoiceDialogShown=false}}>
+                    <div style={{textAlign: 'center', margin: '20px'}}>
+                        <Icon icon="microphone" size={30}> </Icon>
+                        <p>Произнесите команду!</p>
+                        <p>
+                            <Button onClick={()=>{this.state.isVoiceDialogShown=false;this.forceUpdate()}}>
+                                отмена
+                            </Button>
+                        </p>
+                    </div>
+                </Dialog>
             </Page>
         );
     }
