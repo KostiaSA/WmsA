@@ -1,9 +1,8 @@
 import {IMessage} from "../interfaces/IMessage";
 import {IMessageParams} from "../interfaces/IMessageParams";
 import {pushSpeak} from "./speak";
-import {toastShow} from "./toast";
-//var Sound = require('react-native-sound') as any;
-//import {ToastAndroid} from "react-native";
+import {showToast} from "./toast";
+import {playAudio} from "./playAudio";
 
 
 export let lastMessage: IMessage | undefined;
@@ -46,33 +45,19 @@ export function runMessage(message: IMessage, params?: IMessageParams) {
     }
 
     if (message.toast !== undefined) {
-        toastShow(message.toast);
+        showToast(message.toast);
     }
-    //
-    // if (message.sound !== undefined && message.voice !== undefined) {
-    //     var sound = new Sound(message.sound, Sound.MAIN_BUNDLE, (error: any) => {
-    //         if (error) {
-    //             console.log('failed to load the sound', error);
-    //         } else { // loaded successfully
-    //             sound.play();
-    //             setTimeout(()=> {
-    //                 pushSpeak(message.voice!);
-    //             }, 800);
-    //             //console.log('duration in seconds: ' + whoosh.getDuration() +
-    //             //  'number of channels: ' + whoosh.getNumberOfChannels());
-    //         }
-    //     });
-    // }
-    // else if (message.sound !== undefined) {
-    //     var sound = new Sound(message.sound, Sound.MAIN_BUNDLE, (error: any) => {
-    //         if (error) {
-    //             console.log('failed to load the sound', error);
-    //         } else { // loaded successfully
-    //             sound.play();
-    //         }
-    //     });
-    // }
-    // else if (message.sound !== undefined) {
-    //     pushSpeak(message.voice!);
-    // }
+
+    if (message.sound !== undefined && message.voice !== undefined) {
+        playAudio(message.sound)
+            .then(()=> {
+                pushSpeak(message.voice!);
+            });
+    }
+    else if (message.sound !== undefined) {
+        playAudio(message.sound);
+    }
+    else if (message.voice !== undefined) {
+        pushSpeak(message.voice);
+    }
 }

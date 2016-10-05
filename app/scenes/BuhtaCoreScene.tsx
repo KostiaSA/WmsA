@@ -78,9 +78,6 @@ export class BuhtaCoreScene<TProps extends IBuhtaCoreSceneProps,TState extends B
     }
 
     handleBarcodeButtonPress = () => {
-        //alert("qqq");
-        //alert(barcodeScanner);
-
         this.openCameraScanner(this.props.navigator)
             .then((result: {barcode: string,type: string})=> {
                 if (this.props.onGetBarcode !== undefined)
@@ -103,7 +100,33 @@ export class BuhtaCoreScene<TProps extends IBuhtaCoreSceneProps,TState extends B
     }
 
     openCameraScanner(navigator: Navigator): Promise<{barcode: string,type: string}> {
-        throw  "openCameraScanner"
+        return new Promise<{barcode: string,type: string}>(
+            (resolve: (obj?: {barcode: string,type: string}) => void, reject: (error: string) => void) => {
+
+                (cordova.plugins as any).barcodeScanner.scan(
+                    (result: {text: string,format: string,cancelled: any})=> {
+                        // alert("We got a barcode\n" +
+                        //     "Result: " + result.text + "\n" +
+                        //     "Format: " + result.format + "\n" +
+                        //     "Cancelled: " + result.cancelled);
+                        resolve({barcode:result.text,type:result.format})
+                    },
+                    (error: any) => {
+//                        alert("Scanning failed: " + error);
+                        reject(error.toString());
+                    },
+                    {
+                        // "preferFrontCamera" : true, // iOS and Android
+                        //  "showFlipCameraButton" : true, // iOS and Android
+                        "prompt": "Отсканируйте штрих-код",
+                        // "formats" : "QR_CODE,PDF_417", // default: all but PDF_417 and RSS_EXPANDED
+                        "orientation": "portrait" // Android only (portrait|landscape), default unset so it rotates with the device
+                    });
+
+            });
+
+
+
         // return new Promise<{barcode: string,type: string}>(
         //     (resolve: (result: {barcode: string,type: string}) => void, reject: (error: string) => void) => {
         //
@@ -159,19 +182,19 @@ export class BuhtaCoreScene<TProps extends IBuhtaCoreSceneProps,TState extends B
     }
 
     renderBarcodeButton(): JSX.Element | null {
-         if (this.state.barcodeButtonVisible)
-             return (
-                 <ToolbarButton onClick={this.handleBarcodeButtonPress}>
-                     <i className="fa fa-barcode"></i>
-                 </ToolbarButton>
-             );
+        if (this.state.barcodeButtonVisible)
+            return (
+                <ToolbarButton onClick={this.handleBarcodeButtonPress}>
+                    <i className="fa fa-barcode"></i>
+                </ToolbarButton>
+            );
         //     return (
         //         <Button transparent onPress={this.handleBarcodeButtonPress}>
         //             <Icon style={{fontSize: 18, color: "white"}} name="barcode"/>
         //         </Button>
         //     );
-         else
-        return null;
+        else
+            return null;
     }
 
     renderVoiceButton(): JSX.Element | null {
@@ -186,8 +209,8 @@ export class BuhtaCoreScene<TProps extends IBuhtaCoreSceneProps,TState extends B
         //             <Icon style={{fontSize: 18, color: "white"}} name="microphone"/>
         //         </Button>
         //     );
-         else
-        return null;
+        else
+            return null;
     }
 
     renderContextMenuButton(): JSX.Element | null {

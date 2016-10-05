@@ -16,6 +16,7 @@ import {Button, Page, BackButton, Toolbar} from "react-onsenui";
 import {getDb} from "../core/getDb";
 import {navigatorView} from "../App";
 import {IRoute} from "../interfaces/IRoute";
+import {playAudio} from "../core/playAudio";
 
 export interface IBuhtaLoginSceneProps extends IBuhtaCoreSceneProps {
 
@@ -68,8 +69,11 @@ export class BuhtaLoginScene extends BuhtaCoreScene<IBuhtaLoginSceneProps, Buhta
     }
 
     handleTestSound = ()=> {
+        console.log("/android_asset/www/sound/ok.mp3");
+        playAudio("/android_asset/www/sound/ok.mp3");
+
         //runMessage(СООБЩЕНИЕ_ШТРИХ_КОД_НЕ_НАЙДЕН);
-        runMessage(СООБЩЕНИЕ_НЕВЕРНЫЙ_ПАРОЛЬ);
+       // runMessage(СООБЩЕНИЕ_НЕВЕРНЫЙ_ПАРОЛЬ);
         //
         // var Sound = require('react-native-sound') as any;
         //
