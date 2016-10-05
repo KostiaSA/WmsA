@@ -20,7 +20,6 @@ import {showToast} from "../core/toast";
 //let voice = Voice as any;
 
 export interface IBuhtaCoreSceneProps extends React.ClassAttributes<any> {
-    navigator: Navigator;
     title?: string;
     backIcon?: string;
     onGetBarcode?: (barcode: string, type: string)=>void;
@@ -82,7 +81,7 @@ export class BuhtaCoreScene<TProps extends IBuhtaCoreSceneProps,TState extends B
     }
 
     handleBarcodeButtonPress = () => {
-        this.openCameraScanner(this.props.navigator)
+        this.openCameraScanner()
             .then((result: {barcode: string,type: string})=> {
                 if (this.props.onGetBarcode !== undefined)
                     this.props.onGetBarcode(result.barcode, result.type);
@@ -90,7 +89,7 @@ export class BuhtaCoreScene<TProps extends IBuhtaCoreSceneProps,TState extends B
     }
 
     handleVoiceButtonPress = () => {
-        this.openVoiceScanner(this.props.navigator)
+        this.openVoiceScanner()
             .then((text: string) => {
                 if (this.props.onGetVoiceText !== undefined)
                     this.props.onGetVoiceText(text);
@@ -113,7 +112,7 @@ export class BuhtaCoreScene<TProps extends IBuhtaCoreSceneProps,TState extends B
         }
     }
 
-    openCameraScanner(navigator: Navigator): Promise<{barcode: string,type: string}> {
+    openCameraScanner(): Promise<{barcode: string,type: string}> {
         return new Promise<{barcode: string,type: string}>(
             (resolve: (obj?: {barcode: string,type: string}) => void, reject: (error: string) => void) => {
 
@@ -134,7 +133,7 @@ export class BuhtaCoreScene<TProps extends IBuhtaCoreSceneProps,TState extends B
             });
     }
 
-    openVoiceScanner(navigator: Navigator): Promise<string> {
+    openVoiceScanner(): Promise<string> {
         this.state.isVoiceDialogShown = true;
         this.forceUpdate();
         return speechRecognition()
@@ -307,98 +306,98 @@ export class BuhtaCoreScene<TProps extends IBuhtaCoreSceneProps,TState extends B
 
 }
 
-export interface IBuhtaBarcodeScannerSceneProps extends IBuhtaCoreSceneProps {
-    onBarcodeScanned: (barcode: string, type: string)=>void;
-}
+// export interface IBuhtaBarcodeScannerSceneProps extends IBuhtaCoreSceneProps {
+//     onBarcodeScanned: (barcode: string, type: string)=>void;
+// }
+//
+// export class IBuhtaBarcodeScannerSceneState extends BuhtaCoreSceneState<IBuhtaBarcodeScannerSceneProps> {
+//
+// }
+//
+// export class BuhtaBarcodeScannerScene extends BuhtaCoreScene<IBuhtaBarcodeScannerSceneProps, IBuhtaBarcodeScannerSceneState> {
+//
+//     closingState: boolean;
+//
+//     handleBarcodeReceived = (e: any) => {
+//         if (!this.closingState) {
+//             this.props.onBarcodeScanned(e.data, e.type);
+//             //this.props.navigator.pop();
+//             navigatorView.popPage();
+//             this.closingState = true;  // BarcodeScanner выдает несколько раз подряд одно и тоже значение, обрубаем
+//         }
+//     }
+//
+//     render() {
+//         return <div>**BuhtaBarcodeScannerScene**</div>;
+//         // let BarcodeScanner = BarcodeScannerView as any;
+//         // return (
+//         //     <BuhtaCoreScene navigator={this.props.navigator} title="Чтение штрих-кода">
+//         //         <BarcodeScanner
+//         //             onBarCodeRead={this.handleBarcodeReceived}
+//         //             showViewFinder={true}
+//         //             viewFinderShowLoadingIndicator={false}
+//         //             style={{ height:400 }}
+//         //             torchMode={'off'}
+//         //             cameraType={'back'}
+//         //         />
+//         //     </BuhtaCoreScene>);
+//     }
+// }
 
-export class IBuhtaBarcodeScannerSceneState extends BuhtaCoreSceneState<IBuhtaBarcodeScannerSceneProps> {
-
-}
-
-export class BuhtaBarcodeScannerScene extends BuhtaCoreScene<IBuhtaBarcodeScannerSceneProps, IBuhtaBarcodeScannerSceneState> {
-
-    closingState: boolean;
-
-    handleBarcodeReceived = (e: any) => {
-        if (!this.closingState) {
-            this.props.onBarcodeScanned(e.data, e.type);
-            //this.props.navigator.pop();
-            navigatorView.popPage();
-            this.closingState = true;  // BarcodeScanner выдает несколько раз подряд одно и тоже значение, обрубаем
-        }
-    }
-
-    render() {
-        return <div>**BuhtaBarcodeScannerScene**</div>;
-        // let BarcodeScanner = BarcodeScannerView as any;
-        // return (
-        //     <BuhtaCoreScene navigator={this.props.navigator} title="Чтение штрих-кода">
-        //         <BarcodeScanner
-        //             onBarCodeRead={this.handleBarcodeReceived}
-        //             showViewFinder={true}
-        //             viewFinderShowLoadingIndicator={false}
-        //             style={{ height:400 }}
-        //             torchMode={'off'}
-        //             cameraType={'back'}
-        //         />
-        //     </BuhtaCoreScene>);
-    }
-}
-
-export interface IBuhtaVoiceScannerSceneProps extends IBuhtaCoreSceneProps {
-    onVoiceScanned: (text: string)=>void;
-}
-
-export class IBuhtaVoiceScannerSceneState extends BuhtaCoreSceneState<IBuhtaVoiceScannerSceneProps> {
-
-}
-
-export class BuhtaVoiceScannerScene extends BuhtaCoreScene<IBuhtaVoiceScannerSceneProps, IBuhtaVoiceScannerSceneState> {
-
-
-    componentDidMount() {
-        super.componentDidMount();
-
-        // voice.onSpeechError = (e: any)=> {
-        //     console.log(e);
-        //     throw e;
-        // };
-        //
-        // voice.onSpeechResults = (e: any)=> {
-        //     console.log(e);
-        //     let text = e.value[0];
-        //     if (!this.closingState) {
-        //         this.props.onVoiceScanned(e.value[0]);
-        //         this.props.navigator.pop();
-        //         this.closingState = true;
-        //     }
-        // };
-        //
-        // voice.onSpeechPartialResults = (e: any)=> {
-        //     console.log(e);
-        //     let text = e.value[0];
-        //     if (text.toString().length > 0) {
-        //         this.partialText = text;
-        //         this.forceUpdate();
-        //     }
-        // };
-        //
-        // const error = voice.start('ru');
-        // if (error) {
-        //     throw error;
-        // }
-
-    };
-
-    partialText: string = "Говорите...";
-
-    closingState: boolean;
-
-    render() {
-        return <div>**BuhtaVoiceScannerScene**</div>;
-        // return (
-        //     <BuhtaCoreScene navigator={this.props.navigator} title="Чтение штрих-кода">
-        //         <Text>{this.partialText}</Text>
-        //     </BuhtaCoreScene>);
-    }
-}
+// export interface IBuhtaVoiceScannerSceneProps extends IBuhtaCoreSceneProps {
+//     onVoiceScanned: (text: string)=>void;
+// }
+//
+// export class IBuhtaVoiceScannerSceneState extends BuhtaCoreSceneState<IBuhtaVoiceScannerSceneProps> {
+//
+// }
+//
+// export class BuhtaVoiceScannerScene extends BuhtaCoreScene<IBuhtaVoiceScannerSceneProps, IBuhtaVoiceScannerSceneState> {
+//
+//
+//     componentDidMount() {
+//         super.componentDidMount();
+//
+//         // voice.onSpeechError = (e: any)=> {
+//         //     console.log(e);
+//         //     throw e;
+//         // };
+//         //
+//         // voice.onSpeechResults = (e: any)=> {
+//         //     console.log(e);
+//         //     let text = e.value[0];
+//         //     if (!this.closingState) {
+//         //         this.props.onVoiceScanned(e.value[0]);
+//         //         this.props.navigator.pop();
+//         //         this.closingState = true;
+//         //     }
+//         // };
+//         //
+//         // voice.onSpeechPartialResults = (e: any)=> {
+//         //     console.log(e);
+//         //     let text = e.value[0];
+//         //     if (text.toString().length > 0) {
+//         //         this.partialText = text;
+//         //         this.forceUpdate();
+//         //     }
+//         // };
+//         //
+//         // const error = voice.start('ru');
+//         // if (error) {
+//         //     throw error;
+//         // }
+//
+//     };
+//
+//     partialText: string = "Говорите...";
+//
+//     closingState: boolean;
+//
+//     render() {
+//         return <div>**BuhtaVoiceScannerScene**</div>;
+//         // return (
+//         //     <BuhtaCoreScene navigator={this.props.navigator} title="Чтение штрих-кода">
+//         //         <Text>{this.partialText}</Text>
+//         //     </BuhtaCoreScene>);
+//     }
+// }

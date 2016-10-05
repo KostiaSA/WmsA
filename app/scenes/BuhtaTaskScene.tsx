@@ -33,6 +33,9 @@ import {РЕГИСТР_ПАЛЛЕТА_В_ЗАДАНИИ, РЕГИСТР_ЗАДА
 
 import {Button, ListItem, Ripple} from "react-onsenui";
 import {showToast} from "../core/toast";
+import {IBuhtaTaskContextMenuSceneProps, BuhtaTaskContextMenuScene} from "./BuhtaTaskContextMenuScene";
+import {IRoute} from "../interfaces/IRoute";
+import {navigatorView} from "../App";
 
 //let Text = Text_ as any;
 
@@ -85,18 +88,17 @@ export class BuhtaTaskSceneState extends BuhtaCoreSceneState<IBuhtaTaskSceneProp
     }
 
     handleContextMenu() {
-        // let sceneProps: IBuhtaTaskContextMenuSceneProps = {
-        //     navigator: this.props.navigator,
-        //     taskSceneState: this
-        // }
-        //
-        // let route: Route = {
-        //     component: BuhtaTaskContextMenuScene,
-        //     passProps: sceneProps,
-        //     sceneConfig: getNavigatorNoTransition(),
-        //
-        // };//, sceneConfig:Navigator.SceneConfigs.FadeAndroid};
-        // this.props.navigator.push(route);
+        let sceneProps: IBuhtaTaskContextMenuSceneProps = {
+            taskSceneState: this
+        }
+
+        let route: IRoute = {
+            component: BuhtaTaskContextMenuScene,
+            componentProps: sceneProps
+
+        };
+        console.log("navigatorView.pushPage");
+        navigatorView.pushPage(route, {animation: "slide"});
 
     }
 
@@ -656,7 +658,6 @@ export class BuhtaTaskScene extends BuhtaCoreScene<IBuhtaTaskSceneProps, BuhtaTa
         return (
             <BuhtaCoreScene
                 ref={(e:any)=>{this.coreScene=e;}}
-                navigator={this.props.navigator}
                 title={"Задание "+this.props.taskId}
                 onGetBarcode={(barcode: string, type: string)=>{ this.state.handleBarcodeScan(barcode);}}
                 onGetVoiceText={( text: string)=>{ this.state.handleVoiceText(text); }}

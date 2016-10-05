@@ -36,7 +36,7 @@ export interface ITaskSpecConfig {
     autoByBarcoder: boolean;
     voiceCommand?: ICommand;
     showInContextMenu: boolean;
-//    contextMenuScene?: React.ComponentClass<React.ViewProperties>;
+    contextMenuScene?: Function;//React.ComponentClass<React.ViewProperties>;
     contextMenuSceneTitle?: string;
 }
 

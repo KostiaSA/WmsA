@@ -48,7 +48,6 @@ export class BuhtaLoginScene extends BuhtaCoreScene<IBuhtaLoginSceneProps, Buhta
         let sceneProps: IBuhtaTaskSceneProps = {
             taskId: 370683,
             userId: 1,
-            navigator: this.props.navigator,
             taskConfig: Приемка_Товара
         }
 
@@ -154,7 +153,7 @@ export class BuhtaLoginScene extends BuhtaCoreScene<IBuhtaLoginSceneProps, Buhta
     render() {
         console.log("render BuhtaScene");
         return (
-            <BuhtaCoreScene navigator={this.props.navigator} title="БУХта WMS" backIcon="sign-in">
+            <BuhtaCoreScene title="БУХта WMS" backIcon="sign-in">
                 <div style={{ fontSize: 20 }}>
                     Войдите в систему!!
                 </div>
