@@ -155,10 +155,10 @@ export class BuhtaTaskSceneState extends BuhtaCoreSceneState<IBuhtaTaskSceneProp
         let ret: string[] = [];
 
         if (this.props.taskConfig.sourcePlacesConfig !== undefined)
-            ret = ret.concat(this.props.taskConfig.sourcePlacesConfig.allowedSubcontos.map((item:ISubcontoType)=>item.type));
+            ret = ret.concat(this.props.taskConfig.sourcePlacesConfig.allowedSubcontos.map((item: ISubcontoType)=>item.type));
 
         if (this.props.taskConfig.targetPlacesConfig !== undefined)
-            ret = ret.concat(this.props.taskConfig.targetPlacesConfig.allowedSubcontos.map((item:ISubcontoType)=>item.type));
+            ret = ret.concat(this.props.taskConfig.targetPlacesConfig.allowedSubcontos.map((item: ISubcontoType)=>item.type));
 
         ret = ret.concat(this.props.taskConfig.specConfig.map((item: ITaskSpecConfig)=>item.objectSubcontoType.type));
         //alert(ret.join("+"));
@@ -577,6 +577,22 @@ export class BuhtaTaskScene extends BuhtaCoreScene<IBuhtaTaskSceneProps, BuhtaTa
 
     }
 
+    handlePressXXX = (spec: ITaskSpecConfig)=> {
+        if (spec.contextMenuScene !== undefined) {
+            let sceneProps = {
+                title: spec.contextMenuSceneTitle,
+                taskState: this.state,
+                taskSpecConfig: spec
+            }
+
+            let route: IRoute = {
+                component: spec.contextMenuScene,
+                componentProps: sceneProps,
+            };
+            navigatorView.pushPage(route);
+        }
+    }
+
 
     renderTargets = (): JSX.Element | null => {
         //return <div>renderTargets</div>;
@@ -595,17 +611,24 @@ export class BuhtaTaskScene extends BuhtaCoreScene<IBuhtaTaskSceneProps, BuhtaTa
             }
             else {
 
-                let buttons:JSX.Element[]=[];
+                let buttons: JSX.Element[] = [];
 
-                this.props.taskConfig.targetPlacesConfig.placesNotReadyTaskSpecs.forEach((taskSpec:ITaskSpecConfig)=>{
+                this.props.taskConfig.targetPlacesConfig.placesNotReadyTaskSpecs.forEach((taskSpec: ITaskSpecConfig, index: number)=> {
                     buttons.push(
-                        <Button style={{marginTop: 5}}>{taskSpec.taskSpecName}</Button>
+                        <Button
+                            key={index}
+                            style={{marginTop: 5}}
+                            onClick={()=>{navigator.vibrate(100); this.handlePressXXX(taskSpec)}}
+                        >
+                            {taskSpec.taskSpecName}
+                        </Button>
                     );
-                },this);
+                }, this);
 
                 ret.push(
                     <div style={{textAlign: "center"}}>
-                        <div className="target-places-not-ready-text">{this.props.taskConfig.targetPlacesConfig.placesNotReadyText}</div>
+                        <div
+                            className="target-places-not-ready-text">{this.props.taskConfig.targetPlacesConfig.placesNotReadyText}</div>
                         {buttons}
                     </div>
                 );

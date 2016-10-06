@@ -13,6 +13,7 @@ import {
 } from "../common/Buhta";
 
 import {ISubcontoType} from "../common/registerSubcontoType";
+import {BuhtaTaskContextBarcoderScene} from "../scenes/BuhtaTaskContextBarcoderScene";
 
 //import {BuhtaTaskContextBarcoderScene} from "../scenes/BuhtaTaskContextBarcoderScene";
 
@@ -45,8 +46,9 @@ export interface ITaskSpecConfig {
     autoByBarcoder: boolean;
     voiceCommand?: ICommand;
     showInContextMenu: boolean;
-    contextMenuScene?: Function;//React.ComponentClass<React.ViewProperties>;
+    contextMenuScene?: React.ComponentClass<React.ViewProperties>;
     contextMenuSceneTitle?: string;
+    contextMenuSceneVoiceTitle?: string;
 }
 
 
@@ -76,8 +78,9 @@ let Взять_паллету_в_задание: ITaskSpecConfig = {
         words: "взять паллету",
         number: "REQ"
     },
-    //contextMenuScene: BuhtaTaskContextBarcoderScene,
-    contextMenuSceneTitle: "Отсканируйте штрих-код паллеты"
+    contextMenuScene: BuhtaTaskContextBarcoderScene,
+    contextMenuSceneTitle: "Отсканируйте штрих-код паллеты",
+    contextMenuSceneVoiceTitle: "Проговорите штрих-код паллеты"
 }
 
 let Взять_коробку_в_задание: ITaskSpecConfig = {
@@ -91,8 +94,9 @@ let Взять_коробку_в_задание: ITaskSpecConfig = {
         words: "взять коробку",
         number: "REQ"
     },
-    //contextMenuScene: BuhtaTaskContextBarcoderScene,
-    contextMenuSceneTitle: "Отсканируйте штрих-код коробки"
+    contextMenuScene: BuhtaTaskContextBarcoderScene,
+    contextMenuSceneTitle: "Отсканируйте штрих-код коробки",
+    contextMenuSceneVoiceTitle: "Проговорите штрих-код коробки"
 }
 
 

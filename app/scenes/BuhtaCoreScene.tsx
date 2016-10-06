@@ -45,6 +45,7 @@ export class BuhtaCoreSceneState<TProps extends IBuhtaCoreSceneProps> {
     contextMenuButtonVisible: boolean;
 
     isVoiceDialogShown: boolean;
+    voiceDialogTitle: string | undefined;
 
     scannedBarcode: string;
     scannedBarcodeType: string;
@@ -136,7 +137,8 @@ export class BuhtaCoreScene<TProps extends IBuhtaCoreSceneProps,TState extends B
             });
     }
 
-    openVoiceScanner(): Promise<string> {
+    openVoiceScanner(title?: string): Promise<string> {
+        this.state.voiceDialogTitle = title;
         this.state.isVoiceDialogShown = true;
         this.forceUpdate();
         return speechRecognition()
@@ -253,7 +255,7 @@ export class BuhtaCoreScene<TProps extends IBuhtaCoreSceneProps,TState extends B
                     onCancel={()=>{this.state.isVoiceDialogShown=false}}>
                     <div style={{textAlign: 'center', margin: '20px'}}>
                         <Icon icon="microphone" size={40}> </Icon>
-                        <p>Произнесите команду!</p>
+                        <p>{this.state.voiceDialogTitle || "Произнесите команду"}</p>
                         <p>
                             <Button onClick={()=>{this.state.isVoiceDialogShown=false;this.forceUpdate()}}>
                                 отмена
