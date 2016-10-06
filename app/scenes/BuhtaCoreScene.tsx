@@ -81,6 +81,7 @@ export class BuhtaCoreScene<TProps extends IBuhtaCoreSceneProps,TState extends B
     }
 
     handleBarcodeButtonPress = () => {
+        navigator.vibrate(100);
         this.openCameraScanner()
             .then((result: {barcode: string,type: string})=> {
                 if (this.props.onGetBarcode !== undefined)
@@ -89,6 +90,7 @@ export class BuhtaCoreScene<TProps extends IBuhtaCoreSceneProps,TState extends B
     }
 
     handleVoiceButtonPress = () => {
+        navigator.vibrate(100);
         this.openVoiceScanner()
             .then((text: string) => {
                 if (this.props.onGetVoiceText !== undefined)
@@ -97,6 +99,7 @@ export class BuhtaCoreScene<TProps extends IBuhtaCoreSceneProps,TState extends B
     }
 
     handleContextMenuButtonPress = () => {
+        navigator.vibrate(100);
         if (this.props.onContextMenu !== undefined)
             this.props.onContextMenu();
     }

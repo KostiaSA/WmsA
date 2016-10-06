@@ -9,7 +9,6 @@ import {DataTable, DataRow} from "../core/SqlDb";
 
 
 import {pushSpeak} from "../core/speak";
-import {ISubconto} from "../interfaces/ISubconto";
 
 import {runMessage} from "../core/runMessage";
 import {
@@ -36,6 +35,8 @@ import {showToast} from "../core/toast";
 import {IBuhtaTaskContextMenuSceneProps, BuhtaTaskContextMenuScene} from "./BuhtaTaskContextMenuScene";
 import {IRoute} from "../interfaces/IRoute";
 import {navigatorView} from "../App";
+import {ISubcontoType} from "../common/registerSubcontoType";
+import {ISubconto} from "../interfaces/ISubconto";
 
 //let Text = Text_ as any;
 
@@ -154,12 +155,12 @@ export class BuhtaTaskSceneState extends BuhtaCoreSceneState<IBuhtaTaskSceneProp
         let ret: string[] = [];
 
         if (this.props.taskConfig.sourcePlacesConfig !== undefined)
-            ret = ret.concat(this.props.taskConfig.sourcePlacesConfig.allowedSubcontos);
+            ret = ret.concat(this.props.taskConfig.sourcePlacesConfig.allowedSubcontos.map((item:ISubcontoType)=>item.type));
 
         if (this.props.taskConfig.targetPlacesConfig !== undefined)
-            ret = ret.concat(this.props.taskConfig.targetPlacesConfig.allowedSubcontos);
+            ret = ret.concat(this.props.taskConfig.targetPlacesConfig.allowedSubcontos.map((item:ISubcontoType)=>item.type));
 
-        ret = ret.concat(this.props.taskConfig.specConfig.map((item: ITaskSpecConfig)=>item.objectSubcontoType));
+        ret = ret.concat(this.props.taskConfig.specConfig.map((item: ITaskSpecConfig)=>item.objectSubcontoType.type));
         //alert(ret.join("+"));
         return _.uniq(ret);
     }
@@ -187,7 +188,7 @@ export class BuhtaTaskSceneState extends BuhtaCoreSceneState<IBuhtaTaskSceneProp
             let subconto = subcontos[i];
             for (let j = 0; j < this.props.taskConfig.specConfig.length; j++) {
                 let spec = this.props.taskConfig.specConfig[j];
-                if (spec.autoByBarcoder === true && spec.objectSubcontoType === subconto.type) {
+                if (spec.autoByBarcoder === true && spec.objectSubcontoType.type === subconto.type) {
                     // нашли нужное действие, проверяем его на выполнимость (check) и выполняем (run)
                     return spec.generateTaskSpecAlgorithm("check", this, spec, subconto)
                         .then((resultMessage: IMessage)=> {
@@ -218,7 +219,7 @@ export class BuhtaTaskSceneState extends BuhtaCoreSceneState<IBuhtaTaskSceneProp
 
     }
 
-    // handleSubcontoScan_old(subconto: ISubconto[]): Promise<void> {
+    // handleSubcontoScan_old(type: ISubcontoType[]): Promise<void> {
     //     return new Promise<void>(
     //         (resolve: () => void, reject: (error: string) => void) => {
     //
@@ -233,7 +234,7 @@ export class BuhtaTaskSceneState extends BuhtaCoreSceneState<IBuhtaTaskSceneProp
     //
     //             // если source отсутствует (приемка), то требуется полное совпадение штрих-кода
     //             if (this.props.taskConfig.sourcePlacesConfig === undefined || this.props.taskConfig.sourcePlacesConfig.allowedCount === "none") {
-    //                 if (subconto.length > 1) {
+    //                 if (type.length > 1) {
     //                     runMessage(СООБЩЕНИЕ_НАЙДЕНО_НЕСКОЛЬКО_ШТРИХ_КОДОВ);
     //                     reject(СООБЩЕНИЕ_НАЙДЕНО_НЕСКОЛЬКО_ШТРИХ_КОДОВ.toast!);
     //                 }
@@ -248,8 +249,8 @@ export class BuhtaTaskSceneState extends BuhtaCoreSceneState<IBuhtaTaskSceneProp
     //                 sourceId: this.getActiveSourcePlace().id,
     //                 targetType: this.getActiveTargetPlace().type,
     //                 targetId: this.getActiveTargetPlace().id,
-    //                 objectType: subconto[0].type,
-    //                 objectId: subconto[0].id,
+    //                 objectType: type[0].type,
+    //                 objectId: type[0].id,
     //                 prihodDogId: this.dogId
     //             }
     //
@@ -593,10 +594,19 @@ export class BuhtaTaskScene extends BuhtaCoreScene<IBuhtaTaskSceneProps, BuhtaTa
                 return null;
             }
             else {
+
+                let buttons:JSX.Element[]=[];
+
+                this.props.taskConfig.targetPlacesConfig.placesNotReadyTaskSpecs.forEach((taskSpec:ITaskSpecConfig)=>{
+                    buttons.push(
+                        <Button style={{marginTop: 5}}>{taskSpec.taskSpecName}</Button>
+                    );
+                },this);
+
                 ret.push(
-                    <div iconRight button onPress={()=>{this.state.handleTargetPlaceClick(0)}}>
-                        <span>{this.props.taskConfig.targetPlacesConfig.placesNotReadyText}</span>
-                        <img name="bullseye" style={{fontSize: 20, color: "red"}}/>
+                    <div style={{textAlign: "center"}}>
+                        <div className="target-places-not-ready-text">{this.props.taskConfig.targetPlacesConfig.placesNotReadyText}</div>
+                        {buttons}
                     </div>
                 );
             }

@@ -36,3 +36,9 @@
 .task-targets tr:active {
     background-color: #dedede;
 }
+
+.target-places-not-ready-text {
+    font-size: 16px;
+    font-weight: bold;
+    color: orangered;
+}

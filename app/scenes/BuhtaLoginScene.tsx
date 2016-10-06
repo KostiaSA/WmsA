@@ -44,19 +44,23 @@ export class BuhtaLoginScene extends BuhtaCoreScene<IBuhtaLoginSceneProps, Buhta
     }
 
     handleTestTaskButtonPress = ()=> {
+        navigator.vibrate(100);
+        getDb().selectToNumber("SELECT Ключ FROM Задание where Договор=169494").then((docId:number)=>{
+            let sceneProps: IBuhtaTaskSceneProps = {
+                taskId: docId,
+                userId: 1,
+                taskConfig: Приемка_Товара
+            }
 
-        let sceneProps: IBuhtaTaskSceneProps = {
-            taskId: 370683,
-            userId: 1,
-            taskConfig: Приемка_Товара
-        }
 
+            let mainMenuRoute: IRoute = {
+                component: BuhtaTaskScene,
+                componentProps: sceneProps
+            };//, sceneConfig:Navigator.SceneConfigs.FadeAndroid};
+            navigatorView.pushPage(mainMenuRoute, {animation: "slide"});
 
-        let mainMenuRoute: IRoute = {
-            component: BuhtaTaskScene,
-            componentProps: sceneProps
-        };//, sceneConfig:Navigator.SceneConfigs.FadeAndroid};
-        navigatorView.pushPage(mainMenuRoute, {animation: "slide"});
+        });
+
     }
 
     handleTestEncrypt = ()=> {
