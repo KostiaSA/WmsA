@@ -51,6 +51,10 @@
                         {
                             "xml": "<feature name=\"Accelerometer\"><param name=\"android-package\" value=\"org.apache.cordova.devicemotion.AccelListener\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Device\"><param name=\"android-package\" value=\"org.apache.cordova.device.Device\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -166,6 +170,9 @@
             "PACKAGE_NAME": "ru.buhta.wms"
         },
         "cordova-plugin-shake": {
+            "PACKAGE_NAME": "ru.buhta.wms"
+        },
+        "cordova-plugin-device": {
             "PACKAGE_NAME": "ru.buhta.wms"
         }
     },
@@ -501,6 +508,14 @@
             "clobbers": [
                 "shake"
             ]
+        },
+        {
+            "id": "cordova-plugin-device.device",
+            "file": "plugins/cordova-plugin-device/www/device.js",
+            "pluginId": "cordova-plugin-device",
+            "clobbers": [
+                "device"
+            ]
         }
     ],
     "plugin_metadata": {
@@ -517,6 +532,7 @@
         "cordova-plugin-media": "2.4.0",
         "org.apache.cordova.speech.speechrecognition": "0.1.1",
         "cordova-plugin-device-motion": "1.2.2",
-        "cordova-plugin-shake": "0.5.4"
+        "cordova-plugin-shake": "0.5.4",
+        "cordova-plugin-device": "1.1.3"
     }
 }

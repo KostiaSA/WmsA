@@ -80,7 +80,7 @@ let Взять_паллету_в_задание: ITaskSpecConfig = {
     },
     contextMenuScene: BuhtaTaskContextBarcoderScene,
     contextMenuSceneTitle: "Отсканируйте штрих-код паллеты",
-    contextMenuSceneVoiceTitle: "Проговорите штрих-код паллеты"
+    contextMenuSceneVoiceTitle: "Продиктуйте штрих-код паллеты"
 }
 
 let Взять_коробку_в_задание: ITaskSpecConfig = {
@@ -96,7 +96,7 @@ let Взять_коробку_в_задание: ITaskSpecConfig = {
     },
     contextMenuScene: BuhtaTaskContextBarcoderScene,
     contextMenuSceneTitle: "Отсканируйте штрих-код коробки",
-    contextMenuSceneVoiceTitle: "Проговорите штрих-код коробки"
+    contextMenuSceneVoiceTitle: "Продиктуйте штрих-код коробки"
 }
 
 

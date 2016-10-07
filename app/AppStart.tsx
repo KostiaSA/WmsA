@@ -5,6 +5,8 @@ import {NavigatorView} from "onsenui";
 import {TestLogin} from "./test/TestLogin";
 import {navigatorView, setNavigator, setTopScene, topScene} from "./App";
 import {BuhtaLoginScene} from "./scenes/BuhtaLoginScene";
+import {getDevice} from "./core/device";
+import isUndefined = require("lodash/isUndefined");
 
 ReactDOM.render(
     <Navigator
@@ -52,6 +54,9 @@ function onShake() {
 
 
 function onDeviceReady() {
+    if (getDevice()===undefined)
+        (navigator as any).app.exitApp();
+
     document.addEventListener("pause", onPause, false);
     document.addEventListener("resume", onResume, false);
     document.addEventListener("menubutton", onMenuKeyDown, false);

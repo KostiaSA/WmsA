@@ -39,6 +39,9 @@
         },
         "cordova-plugin-shake": {
             "PACKAGE_NAME": "ru.buhta.wms"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "ru.buhta.wms"
         }
     },
     "dependent_plugins": {

@@ -16,6 +16,8 @@ import {navigatorView} from "../App";
 import {getInstantPromise} from "../core/getInstantPromise";
 import {speechRecognition} from "../core/speechRecognition";
 import {showToast} from "../core/toast";
+import {getDevice} from "../core/device";
+import {getDeveloperMode, developerModeBarcodes, IDeveloperModeBarcode} from "../core/developerMode";
 
 //let voice = Voice as any;
 
@@ -32,8 +34,8 @@ export class BuhtaCoreSceneState<TProps extends IBuhtaCoreSceneProps> {
     constructor(props: TProps, scene: any) {
         this.props = props;
         this.scene = scene;
-        this.barcodeButtonVisible = _.isFunction(props.onGetBarcode);
-        this.voiceButtonVisible = _.isFunction(props.onGetVoiceText);
+        this.barcodeButtonVisible = _.isFunction(props.onGetBarcode) && getDevice().barcode === "camera";
+        this.voiceButtonVisible = _.isFunction(props.onGetVoiceText) && getDevice().voice;
         this.contextMenuButtonVisible = _.isFunction(props.onContextMenu);
     }
 
@@ -46,6 +48,8 @@ export class BuhtaCoreSceneState<TProps extends IBuhtaCoreSceneProps> {
 
     isVoiceDialogShown: boolean;
     voiceDialogTitle: string | undefined;
+
+    isDeveloperDialogShown: boolean;
 
     scannedBarcode: string;
     scannedBarcodeType: string;
@@ -90,6 +94,15 @@ export class BuhtaCoreScene<TProps extends IBuhtaCoreSceneProps,TState extends B
             });
     }
 
+    handleDeveloperButtonPress = () => {
+        navigator.vibrate(100);
+        this.openDeveloperScanner()
+            .then((result: {barcode: string,type: string})=> {
+                if (this.props.onGetBarcode !== undefined)
+                    this.props.onGetBarcode(result.barcode, result.type);
+            });
+    }
+
     handleVoiceButtonPress = () => {
         navigator.vibrate(100);
         this.openVoiceScanner()
@@ -114,6 +127,19 @@ export class BuhtaCoreScene<TProps extends IBuhtaCoreSceneProps,TState extends B
             navigator.vibrate(100);
             this.handleVoiceButtonPress();
         }
+    }
+
+    developerScannerResolve: (obj?: {barcode: string,type: string}) => void;
+    developerScannerReject: (error: string) => void;
+
+    openDeveloperScanner(): Promise<{barcode: string,type: string}> {
+        return new Promise<{barcode: string,type: string}>(
+            (resolve: (obj?: {barcode: string,type: string}) => void, reject: (error: string) => void) => {
+                this.developerScannerResolve = resolve;
+                this.developerScannerReject = reject;
+                this.state.isDeveloperDialogShown = true;
+                this.forceUpdate();
+            });
     }
 
     openCameraScanner(): Promise<{barcode: string,type: string}> {
@@ -159,7 +185,23 @@ export class BuhtaCoreScene<TProps extends IBuhtaCoreSceneProps,TState extends B
         if (this.state.barcodeButtonVisible)
             return (
                 <ToolbarButton onClick={this.handleBarcodeButtonPress}>
-                    <i className="fa fa-barcode"></i>
+                    <i className="fa fa-camera"></i>
+                </ToolbarButton>
+            );
+        //     return (
+        //         <Button transparent onPress={this.handleBarcodeButtonPress}>
+        //             <Icon style={{fontSize: 18, color: "white"}} name="barcode"/>
+        //         </Button>
+        //     );
+        else
+            return null;
+    }
+
+    renderDeveloperButton(): JSX.Element | null {
+        if (this.state.barcodeButtonVisible)
+            return (
+                <ToolbarButton onClick={this.handleDeveloperButtonPress}>
+                    <i className="fa fa-bug"></i>
                 </ToolbarButton>
             );
         //     return (
@@ -235,12 +277,49 @@ export class BuhtaCoreScene<TProps extends IBuhtaCoreSceneProps,TState extends B
                 </div>
                 <div className="center">{this.props.title}</div>
                 <div className="right">
+                    {this.renderDeveloperButton()}
                     {this.renderBarcodeButton()}
                     {this.renderVoiceButton()}
                     {this.renderContextMenuButton()}
                 </div>
             </Toolbar>
         );
+    }
+
+    renderDeveloperDialog(): JSX.Element | null {
+
+        let renderBarcodes = (): JSX.Element[]=> {
+            return developerModeBarcodes.map((barcode: IDeveloperModeBarcode, index: number)=> {
+                return (
+                    <Button key={index} modifier="outline" onClick={()=>{
+                        this.state.isDeveloperDialogShown=false;
+                        this.forceUpdate();
+                        this.developerScannerResolve({barcode: barcode.barcode,type: barcode.type.type});
+                  }}>
+                        {barcode.type.type}: {barcode.barcode}
+                    </Button>
+                );
+            }, this);
+        }
+
+        if (!getDeveloperMode())
+            return null;
+        else {
+            return (
+                <Dialog
+                    isOpen={this.state.isDeveloperDialogShown===true}
+                    isCancelable={true}
+                    onCancel={()=>{
+                        this.state.isDeveloperDialogShown=false;
+                        this.forceUpdate();
+                        this.developerScannerReject("");
+                      }}>
+                    <div style={{textAlign: 'center', margin: '20px'}}>
+                        {renderBarcodes()}
+                    </div>
+                </Dialog>
+            );
+        }
     }
 
 
@@ -263,6 +342,8 @@ export class BuhtaCoreScene<TProps extends IBuhtaCoreSceneProps,TState extends B
                         </p>
                     </div>
                 </Dialog>
+
+                {this.renderDeveloperDialog()}
             </Page>
         );
     }

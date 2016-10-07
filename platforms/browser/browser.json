@@ -11,6 +11,10 @@
                         {
                             "xml": "<feature name=\"BarcodeScanner\"><param name=\"browser-package\" value=\"BarcodeScanner\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Device\"><param name=\"browser-package\" value=\"Device\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -58,6 +62,9 @@
             "PACKAGE_NAME": "ru.buhta.wms"
         },
         "cordova-plugin-shake": {
+            "PACKAGE_NAME": "ru.buhta.wms"
+        },
+        "cordova-plugin-device": {
             "PACKAGE_NAME": "ru.buhta.wms"
         }
     },
@@ -428,6 +435,20 @@
             "clobbers": [
                 "shake"
             ]
+        },
+        {
+            "file": "plugins/cordova-plugin-device/www/device.js",
+            "id": "cordova-plugin-device.device",
+            "pluginId": "cordova-plugin-device",
+            "clobbers": [
+                "device"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-device/src/browser/DeviceProxy.js",
+            "id": "cordova-plugin-device.DeviceProxy",
+            "pluginId": "cordova-plugin-device",
+            "runs": true
         }
     ],
     "plugin_metadata": {
@@ -444,6 +465,7 @@
         "cordova-plugin-media": "2.4.0",
         "org.apache.cordova.speech.speechrecognition": "0.1.1",
         "cordova-plugin-device-motion": "1.2.2",
-        "cordova-plugin-shake": "0.5.4"
+        "cordova-plugin-shake": "0.5.4",
+        "cordova-plugin-device": "1.1.3"
     }
 }

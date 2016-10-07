@@ -441,6 +441,7 @@ export class TaskStep_Приемка extends TaskStep {
     renderIncompleteStep(): JSX.Element {
         return (
             <table className="task-step" style={{borderBottom:"1px solid silver"}}>
+                <tbody>
                 <tr>
                     <td>
                         <span className="task-step-caption">опер.</span>
@@ -466,6 +467,7 @@ export class TaskStep_Приемка extends TaskStep {
                         <span className="task-step-value" style={{ color:"royalblue"}}>{this.kol} шт.</span>
                     </td>
                 </tr>
+                </tbody>
             </table>
         );
         //return <div>TaskStep_Приемка </div>;
@@ -600,9 +602,11 @@ export class BuhtaTaskScene extends BuhtaCoreScene<IBuhtaTaskSceneProps, BuhtaTa
 
         if (!this.state.isStepsLoaded)
             return (
-                <div iconRight button onPress={()=>{this.state.handleTargetPlaceClick(0)}}>
-                    <span>загрузка...</span>
-                </div>
+                <tr>
+                    <td>
+                        <span>загрузка...</span>
+                    </td>
+                </tr>
             );
 
         if (this.state.targetPlaces.length === 0) {
@@ -626,11 +630,17 @@ export class BuhtaTaskScene extends BuhtaCoreScene<IBuhtaTaskSceneProps, BuhtaTa
                 }, this);
 
                 ret.push(
-                    <div style={{textAlign: "center"}}>
-                        <div
-                            className="target-places-not-ready-text">{this.props.taskConfig.targetPlacesConfig.placesNotReadyText}</div>
-                        {buttons}
-                    </div>
+                    <tr>
+                        <td>
+                            <div style={{textAlign: "center"}}>
+                                <div
+                                    className="target-places-not-ready-text"
+                                >{this.props.taskConfig.targetPlacesConfig.placesNotReadyText}
+                                </div>
+                                {buttons}
+                            </div>
+                        </td>
+                    </tr>
                 );
             }
         }
