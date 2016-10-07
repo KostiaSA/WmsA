@@ -703,6 +703,10 @@ export class BuhtaTaskScene extends BuhtaCoreScene<IBuhtaTaskSceneProps, BuhtaTa
         this.coreScene.handleShake();
     }
 
+    onHardBarcode(barcode: string, type: string) {
+        this.coreScene.handleHardBarcode(barcode, type);
+    }
+
     coreScene: BuhtaCoreScene<any,any>;
 
     render() {

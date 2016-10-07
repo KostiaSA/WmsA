@@ -35,7 +35,8 @@ export class BuhtaTaskContextBarcoderScene extends BuhtaCoreScene<IBuhtaTaskCont
 
     handleBarcodeReceived = (e: any) => {
         if (!this.closingState) {
-
+            console.log("handleBarcodeReceived");
+            console.log(e);
             getSubcontoFromFullBarcode(e.data, [this.props.taskSpecConfig.objectSubcontoType.type])
                 .then((subconto: ISubconto[])=> {
                     if (subconto.length === 0) {
@@ -91,7 +92,7 @@ export class BuhtaTaskContextBarcoderScene extends BuhtaCoreScene<IBuhtaTaskCont
 
             //navigatorView.popPage();
             this.closingState = true;  // BarcodeScanner выдает несколько раз подряд одно и тоже значение, обрубаем
-            navigatorView.popPage();
+            //navigatorView.popPage();
         }
     }
 
@@ -138,6 +139,10 @@ export class BuhtaTaskContextBarcoderScene extends BuhtaCoreScene<IBuhtaTaskCont
 
     onShake() {
         this.handleVoiceButton();
+    }
+
+    onHardBarcode(barcode: string, type: string) {
+        this.handleBarcodeReceived({data:barcode});
     }
 
     coreScene: BuhtaCoreScene<any,any>;

@@ -108,6 +108,7 @@ SELECT ${ emitFieldList(fields, "source")}`;
                 .then(()=> {
                     taskState.activeTargetId = palleteBarcode.type + palleteBarcode.id.toString();
                     return {
+                        sound: "pallete-into-task.mp3",
                         voice: "Палета взята в работу",
                         toast: "Паллета взята в работу"
                     };

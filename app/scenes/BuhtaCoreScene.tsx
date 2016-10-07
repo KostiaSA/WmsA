@@ -18,6 +18,8 @@ import {speechRecognition} from "../core/speechRecognition";
 import {showToast} from "../core/toast";
 import {getDevice} from "../core/device";
 import {getDeveloperMode, developerModeBarcodes, IDeveloperModeBarcode} from "../core/developerMode";
+import {runMessage} from "../core/runMessage";
+import {СООБЩЕНИЕ_ШТРИХ_КОДЫ_ЗДЕСЬ_НЕДОПУСТИМЫ} from "../constants/messages";
 
 //let voice = Voice as any;
 
@@ -37,6 +39,7 @@ export class BuhtaCoreSceneState<TProps extends IBuhtaCoreSceneProps> {
         this.barcodeButtonVisible = _.isFunction(props.onGetBarcode) && getDevice().barcode === "camera";
         this.voiceButtonVisible = _.isFunction(props.onGetVoiceText) && getDevice().voice;
         this.contextMenuButtonVisible = _.isFunction(props.onContextMenu);
+        this.developerButtonVisible = getDeveloperMode();
     }
 
     isMounted: boolean;
@@ -45,6 +48,7 @@ export class BuhtaCoreSceneState<TProps extends IBuhtaCoreSceneProps> {
     barcodeButtonVisible: boolean;
     voiceButtonVisible: boolean;
     contextMenuButtonVisible: boolean;
+    developerButtonVisible: boolean;
 
     isVoiceDialogShown: boolean;
     voiceDialogTitle: string | undefined;
@@ -129,6 +133,18 @@ export class BuhtaCoreScene<TProps extends IBuhtaCoreSceneProps,TState extends B
         }
     }
 
+    onHardBarcode(barcode: string, type: string) {
+        // не удалять
+    }
+
+    handleHardBarcode(barcode: string, type: string) {
+        if (_.isFunction(this.props.onGetBarcode)) {
+            this.props.onGetBarcode(barcode, type);
+        }
+        else
+            runMessage(СООБЩЕНИЕ_ШТРИХ_КОДЫ_ЗДЕСЬ_НЕДОПУСТИМЫ);
+    }
+
     developerScannerResolve: (obj?: {barcode: string,type: string}) => void;
     developerScannerReject: (error: string) => void;
 
@@ -198,7 +214,7 @@ export class BuhtaCoreScene<TProps extends IBuhtaCoreSceneProps,TState extends B
     }
 
     renderDeveloperButton(): JSX.Element | null {
-        if (this.state.barcodeButtonVisible)
+        if (this.state.developerButtonVisible)
             return (
                 <ToolbarButton onClick={this.handleDeveloperButtonPress}>
                     <i className="fa fa-bug"></i>

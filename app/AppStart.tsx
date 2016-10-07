@@ -7,6 +7,7 @@ import {navigatorView, setNavigator, setTopScene, topScene} from "./App";
 import {BuhtaLoginScene} from "./scenes/BuhtaLoginScene";
 import {getDevice} from "./core/device";
 import isUndefined = require("lodash/isUndefined");
+import {normalizeHardBarcode} from "./core/normalizeHardBarcode";
 
 ReactDOM.render(
     <Navigator
@@ -52,9 +53,28 @@ function onShake() {
     }
 }
 
+function initHardBarcode() {
+    if (getDevice().barcode === "CipherRS30") {
+        (cordova.plugins as any).CipherlabRS30CordovaPlugin.initialise(()=> {
+            //alert("init-ok");
+            (cordova.plugins as any).CipherlabRS30CordovaPlugin.setReceiveScanCallback(function (data: any) {
+                //удаляем все символы с кодом меньше 32
+                onHardBarcode(normalizeHardBarcode(data), "");
+                // alert("scan received: " + data);
+            });
+
+        });
+    }
+}
+
+function onHardBarcode(barcode: string, type: string) {
+    if (topScene !== undefined && topScene.onHardBarcode !== undefined) {
+        topScene.onHardBarcode(barcode, type);
+    }
+}
 
 function onDeviceReady() {
-    if (getDevice()===undefined)
+    if (getDevice() === undefined)
         (navigator as any).app.exitApp();
 
     document.addEventListener("pause", onPause, false);
@@ -64,6 +84,7 @@ function onDeviceReady() {
     document.addEventListener("volumedownbutton", onVolumeupbutton, false);
 
     initShakeEvent();
+    initHardBarcode();
 }
 
 function onPause() {

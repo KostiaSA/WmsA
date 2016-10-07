@@ -18,16 +18,20 @@ export function setTopScene(scene: BuhtaCoreScene<IBuhtaCoreSceneProps,any>) {
 export function forceUpdateAll() {
     (navigatorView as any).routes.forEach((item: any, index: number)=> {
         (item.ref as BuhtaCoreScene<IBuhtaCoreSceneProps,any>).reloadScene();
-        console.log("item.ref.forceUpdate:" + index);
+        //console.log("item.ref.forceUpdate:" + index);
     });
 }
 
 export function forcePopToTaskScene() {
+    let counter = 1;
     for (let i = (navigatorView as any).routes.length - 1; i > 0; i--) {
         let route = (navigatorView as any).routes[i] as IRoute;
         if (route.component !== BuhtaTaskScene) {
-            console.log("navigatorView.popPage:" + i);
-            navigatorView.popPage();
+            //console.log("navigatorView.popPage:" + i);
+            setTimeout(()=> {
+                navigatorView.popPage({animation:"none"});
+            }, 200 * counter++)
+
         }
         else
             return;

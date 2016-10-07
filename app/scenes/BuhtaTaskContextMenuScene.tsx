@@ -6,6 +6,8 @@ import {ITaskSpecConfig} from "../config/Tasks";
 import {IRoute} from "../interfaces/IRoute";
 import {ListItem, List} from "react-onsenui";
 import {navigatorView} from "../App";
+import {СООБЩЕНИЕ_ШТРИХ_КОДЫ_ЗДЕСЬ_НЕДОПУСТИМЫ} from "../constants/messages";
+import {runMessage} from "../core/runMessage";
 
 export interface IBuhtaTaskContextMenuSceneProps extends IBuhtaCoreSceneProps {
     taskSceneState: BuhtaTaskSceneState;
@@ -42,6 +44,10 @@ export class BuhtaTaskContextMenuScene extends BuhtaCoreScene<IBuhtaTaskContextM
             </ListItem>
         );
     };
+
+    onHardBarcode(barcode: string, type: string) {
+        runMessage(СООБЩЕНИЕ_ШТРИХ_КОДЫ_ЗДЕСЬ_НЕДОПУСТИМЫ);
+    }
 
     render() {
 
