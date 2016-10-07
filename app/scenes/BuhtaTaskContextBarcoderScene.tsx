@@ -14,9 +14,10 @@ import {
 import {IMessage} from "../interfaces/IMessage";
 import {getInstantPromise} from "../core/getInstantPromise";
 import Alert = __React.Alert;
-import {navigatorView} from "../App";
+import {navigatorView, forceUpdateAll, forcePopToTaskScene} from "../App";
 import {Button, Icon, ListItem, Ripple} from "react-onsenui";
 import {getDevice} from "../core/device";
+import {getDeveloperMode} from "../core/developerMode";
 
 export interface IBuhtaTaskContextBarcoderSceneProps extends IBuhtaCoreSceneProps {
     taskState: BuhtaTaskSceneState;
@@ -39,13 +40,13 @@ export class BuhtaTaskContextBarcoderScene extends BuhtaCoreScene<IBuhtaTaskCont
                 .then((subconto: ISubconto[])=> {
                     if (subconto.length === 0) {
                         runMessage(СООБЩЕНИЕ_ШТРИХ_КОД_НЕ_НАЙДЕН);
-                        navigatorView.popPage();
-                        return
+                        //navigatorView.popPage();
+                        //return
                     }
                     else if (subconto.length > 1) {
                         runMessage(СООБЩЕНИЕ_НАЙДЕНО_НЕСКОЛЬКО_ШТРИХ_КОДОВ);
-                        navigatorView.popPage();
-                        return
+                        //navigatorView.popPage();
+                        //return
                     }
                     else {
 
@@ -53,36 +54,44 @@ export class BuhtaTaskContextBarcoderScene extends BuhtaCoreScene<IBuhtaTaskCont
                             .then((resultMessage: IMessage)=> {
                                 if (resultMessage.isError === true) {
                                     runMessage(resultMessage);
-                                    navigatorView.popPage();
-                                    return;
+                                    //navigatorView.popPage();
+                                    //return;
                                 }
                                 else {
                                     this.props.taskSpecConfig.generateTaskSpecAlgorithm("run", this.props.taskState, this.props.taskSpecConfig, subconto[0])
                                         .then((resultMessage: IMessage)=> {
                                             runMessage(resultMessage);
-                                            navigatorView.popPage();
-                                            return;
+                                            forcePopToTaskScene();
+                                            forceUpdateAll();
+                                            //navigatorView.popPage();
+                                            //return;
                                         })
                                         .catch((err)=> {
                                             alert(err);
                                             runMessage(СООБЩЕНИЕ_ОШИБКА);
+                                            //navigatorView.popPage();
+                                            //return;
                                         });
                                 }
                             })
                             .catch((err)=> {
                                 alert(err);
                                 runMessage(СООБЩЕНИЕ_ОШИБКА);
+                                //navigatorView.popPage();
+                                //return;
                             });
                     }
 
                 })
                 .catch((error: any)=> {
                     alert(error);
-                    runMessage(СООБЩЕНИЕ_ОШИБКА);
+                    //runMessage(СООБЩЕНИЕ_ОШИБКА);
+                    //return;
                 });
 
-            navigatorView.popPage();
+            //navigatorView.popPage();
             this.closingState = true;  // BarcodeScanner выдает несколько раз подряд одно и тоже значение, обрубаем
+            navigatorView.popPage();
         }
     }
 
@@ -96,11 +105,19 @@ export class BuhtaTaskContextBarcoderScene extends BuhtaCoreScene<IBuhtaTaskCont
             });
     }
 
+    handleDeveloperButton = () => {
+        navigator.vibrate(100);
+        this.coreScene.openDeveloperScanner()
+            .then((result: {barcode: string,type: string}) => {
+                this.handleBarcodeReceived({data:result.barcode})
+            });
+    }
+
     handleCameraButton = () => {
         navigator.vibrate(100);
         (cordova.plugins as any).barcodeScanner.scan(
             (result: {text: string,format: string,cancelled: any})=> {
-                //resolve({barcode: result.text, type: result.format})
+                this.handleBarcodeReceived({data:result.text})
             },
             (error: any) => {
                 //reject(error.toString());
@@ -135,6 +152,23 @@ export class BuhtaTaskContextBarcoderScene extends BuhtaCoreScene<IBuhtaTaskCont
                     >
                         <i className="fa fa-camera" style={{fontSize: 20}}></i>
                         <span style={{marginLeft: 15}}>сканировать с камеры</span>
+                    </Button>
+                </div>
+            )
+        else
+            return null;
+    }
+
+    renderDeveloperButton(): JSX.Element | null {
+        if (getDeveloperMode())
+            return (
+                <div>
+                    <Button
+                        style={{marginTop: 25}}
+                        onClick={this.handleDeveloperButton}
+                    >
+                        <i className="fa fa-bug" style={{fontSize: 20}}></i>
+                        <span style={{marginLeft: 15}}>список кодов</span>
                     </Button>
                 </div>
             )
@@ -180,7 +214,6 @@ export class BuhtaTaskContextBarcoderScene extends BuhtaCoreScene<IBuhtaTaskCont
                     {this.renderCameraButton()}
                     <div>
                         <Button
-
                             style={{marginTop: 25}}
                             onClick={this.handleInputButton}
                         >
@@ -190,6 +223,7 @@ export class BuhtaTaskContextBarcoderScene extends BuhtaCoreScene<IBuhtaTaskCont
                         </Button>
                     </div>
                     {this.renderVoiceButton()}
+                    {this.renderDeveloperButton()}
                 </div>
             </BuhtaCoreScene>);
     }

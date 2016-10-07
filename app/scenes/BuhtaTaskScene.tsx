@@ -51,7 +51,7 @@ export interface ITaskSourceTargetPlaceState {
     id: number;
     name: string;
     kol: number;
-    isActive: boolean;
+//    isActive: boolean;
 }
 
 export class BuhtaTaskSceneState extends BuhtaCoreSceneState<IBuhtaTaskSceneProps> {
@@ -60,6 +60,8 @@ export class BuhtaTaskSceneState extends BuhtaCoreSceneState<IBuhtaTaskSceneProp
     dogId: number;
     sourcePlaces: ITaskSourceTargetPlaceState[] = [];
     targetPlaces: ITaskSourceTargetPlaceState[] = [];
+    activeSourceId: string | undefined;
+    activeTargetId: string | undefined;
 
     steps: TaskStep[] = [];
 
@@ -291,14 +293,13 @@ export class BuhtaTaskSceneState extends BuhtaCoreSceneState<IBuhtaTaskSceneProp
             type: "Нет",
             id: 0,
             name: "",
-            kol: 0,
-            isActive: true
+            kol: 0
         };
         return ret;
     }
 
     getActiveSourcePlace(): ITaskSourceTargetPlaceState {
-        let ret: ITaskSourceTargetPlaceState = this.sourcePlaces.filter((item: ITaskSourceTargetPlaceState)=>item.isActive)[0];
+        let ret: ITaskSourceTargetPlaceState = this.sourcePlaces.filter((item: ITaskSourceTargetPlaceState)=>item.type + item.id.toString() === this.activeSourceId)[0];
         if (ret === undefined)
             return this.getEmptyPlaceState();
         else
@@ -306,18 +307,27 @@ export class BuhtaTaskSceneState extends BuhtaCoreSceneState<IBuhtaTaskSceneProp
     }
 
     getActiveTargetPlace(): ITaskSourceTargetPlaceState {
-        let ret: ITaskSourceTargetPlaceState = this.targetPlaces.filter((item: ITaskSourceTargetPlaceState)=>item.isActive)[0];
+        let ret: ITaskSourceTargetPlaceState = this.targetPlaces.filter((item: ITaskSourceTargetPlaceState)=>item.type + item.id.toString() === this.activeTargetId)[0];
         if (ret === undefined)
             return this.getEmptyPlaceState();
         else
             return ret;
     }
 
+    checkActiveTargetPlace() {
+        if (this.targetPlaces.length > 0) {
+            if (this.getActiveTargetPlace().type === "Нет") {
+                this.activeTargetId = this.targetPlaces[0].type + this.targetPlaces[0].id;
+            }
+        }
+        else
+            this.activeTargetId = undefined;
+    }
+
     handleTargetPlaceClick(placeIndex: number) {
-        this.targetPlaces.forEach((item: ITaskSourceTargetPlaceState)=>item.isActive = false);
-        this.targetPlaces[placeIndex].isActive = true;
+        this.activeTargetId = this.targetPlaces[placeIndex].type + this.targetPlaces[placeIndex].id;
         this.scene.forceUpdate();
-        pushSpeak("выбрана палета 12" + placeIndex + ".");
+        pushSpeak("выбрана палета 5" + placeIndex + ".");
     }
 
     isStepsLoaded: boolean;
@@ -364,7 +374,8 @@ SELECT
 FROM Остаток
 WHERE 
    Счет=${stringAsSql(РЕГИСТР_ПАЛЛЕТА_В_ЗАДАНИИ)} AND
-   ЗаданиеТип='Док' AND Задание=${this.props.taskId}      
+   ЗаданиеТип='Док' AND Задание=${this.props.taskId}
+ORDER BY Порядок         
     `;
 
         getDb().executeSQL(sql)
@@ -386,23 +397,18 @@ WHERE
                     this.steps.push(step);
                 }, this);
 
-                // набор 2 targets
-                let old_active = this.targetPlaces.filter((item: ITaskSourceTargetPlaceState)=>item.isActive)[0];
-                let old_active_id = -1;
-                if (old_active !== undefined)
-                    old_active_id = old_active.id;
-
+                // набор 2 - targetPlaces
                 this.targetPlaces = [];
                 tables[2].rows.forEach((row: DataRow, index: number)=> {
                     let target: ITaskSourceTargetPlaceState = {
                         type: row.value("ОбъектТип"),
                         id: row.value("Объект"),
                         name: row.value("ОбъектНазвание"),
-                        kol: row.value("Количество"),
-                        isActive: (old_active_id === -1 && index === 0) || (old_active_id === index)
+                        kol: row.value("Количество")
                     };
                     this.targetPlaces.push(target);
                 }, this);
+                this.checkActiveTargetPlace();
 
                 this.isStepsLoaded = true;
                 if (this.isMounted)
@@ -412,8 +418,6 @@ WHERE
                 alert(err);
                 runMessage(СООБЩЕНИЕ_ОШИБКА);
             });
-
-
     }
 }
 
@@ -529,6 +533,11 @@ export class BuhtaTaskScene extends BuhtaCoreScene<IBuhtaTaskSceneProps, BuhtaTa
         //     isActive: true
         // };
 
+    }
+
+    reloadScene() {
+        this.state.loadAllInfoFromSql();
+        super.reloadScene();
     }
 
     componentDidMount() {
@@ -656,7 +665,7 @@ export class BuhtaTaskScene extends BuhtaCoreScene<IBuhtaTaskSceneProps, BuhtaTa
                     targetKolStr = "  (" + target.kol + " мест.)";
 
                 let active =<img src="img/tick.png" height="20" width="20"/>;
-                if (target.isActive !== true)
+                if (target.type + target.id.toString() !== this.state.activeTargetId)
                     active = <div></div>;
 
                 ret.push(

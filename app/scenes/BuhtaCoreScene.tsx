@@ -268,6 +268,9 @@ export class BuhtaCoreScene<TProps extends IBuhtaCoreSceneProps,TState extends B
     //     //     );
     // }
 
+    reloadScene(){
+        this.forceUpdate();
+    }
 
     renderToolbar = (): JSX.Element => {
         return (

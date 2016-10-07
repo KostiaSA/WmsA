@@ -106,19 +106,20 @@ SELECT ${ emitFieldList(fields, "source")}`;
 
             return getDb().executeSQL(sql)
                 .then(()=> {
+                    taskState.activeTargetId = palleteBarcode.type + palleteBarcode.id.toString();
                     return {
                         voice: "Палета взята в работу",
                         toast: "Паллета взята в работу"
                     };
                 })
-            .catch(()=> {
-                return {
-                    isError: true,
-                    sound: "error.mp3",
-                    voice: "непонятно",
-                    toast: "непонятно"
-                };
-            });
+                .catch(()=> {
+                    return {
+                        isError: true,
+                        sound: "error.mp3",
+                        voice: "непонятно",
+                        toast: "непонятно"
+                    };
+                });
 
         });
 
