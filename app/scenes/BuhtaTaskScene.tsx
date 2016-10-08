@@ -186,37 +186,37 @@ export class BuhtaTaskSceneState extends BuhtaCoreSceneState<IBuhtaTaskSceneProp
 
     handleSubcontoScan(subcontos: ISubconto[]): Promise<void> {
 
-        for (let i = 0; i < subcontos.length; i++) {
-            let subconto = subcontos[i];
-            for (let j = 0; j < this.props.taskConfig.specConfig.length; j++) {
-                let spec = this.props.taskConfig.specConfig[j];
-                if (spec.autoByBarcoder === true && spec.objectSubcontoType.type === subconto.type) {
-                    // нашли нужное действие, проверяем его на выполнимость (check) и выполняем (run)
-                    return spec.generateTaskSpecAlgorithm("check", this, spec, subconto)
-                        .then((resultMessage: IMessage)=> {
-                            if (resultMessage.isError === true) {
-                                runMessage(resultMessage);
-                                return getInstantPromise<void>();
-                            }
-                            else {
-                                return spec.generateTaskSpecAlgorithm("run", this, spec, subconto)
-                                    .then((resultMessage: IMessage)=> {
-                                        runMessage(resultMessage);
-                                        return;
-                                    });
-
-                            }
-                        });
-                }
-            }
-        }
-
-        // не нашли нужное действие
-        runMessage({
-            sound: "error.mp3",
-            voice: "Штрих код не подходит",
-            toast: "Штрих код не подходит"
-        });
+        // for (let i = 0; i < subcontos.length; i++) {
+        //     let subconto = subcontos[i];
+        //     for (let j = 0; j < this.props.taskConfig.specConfig.length; j++) {
+        //         let spec = this.props.taskConfig.specConfig[j];
+        //         if (spec.autoByBarcoder === true && spec.objectSubcontoType.type === subconto.type) {
+        //             // нашли нужное действие, проверяем его на выполнимость (check) и выполняем (run)
+        //             return spec.generateTaskSpecAlgorithm("check", this, spec, subconto)
+        //                 .then((resultMessage: IMessage)=> {
+        //                     if (resultMessage.isError === true) {
+        //                         runMessage(resultMessage);
+        //                         return getInstantPromise<void>();
+        //                     }
+        //                     else {
+        //                         return spec.generateTaskSpecAlgorithm("run", this, spec, subconto)
+        //                             .then((resultMessage: IMessage)=> {
+        //                                 runMessage(resultMessage);
+        //                                 return;
+        //                             });
+        //
+        //                     }
+        //                 });
+        //         }
+        //     }
+        // }
+        //
+        // // не нашли нужное действие
+        // runMessage({
+        //     sound: "error.mp3",
+        //     voice: "Штрих код не подходит",
+        //     toast: "Штрих код не подходит"
+        // });
         return getInstantPromise<void>();
 
     }
