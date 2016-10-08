@@ -15,6 +15,8 @@ import {
 import {ISubcontoType} from "../common/registerSubcontoType";
 import {BuhtaTaskContextBarcoderScene} from "../scenes/BuhtaTaskContextBarcoderScene";
 import {I_Регистр} from "../interfaces/I_Регистр";
+import {I_Генерация, ГенАлгоритм, ГенОбъект, ГенЗадание, ГенКоличество} from "../interfaces/I_Генерация";
+import {Регистр_НовыеПаллеты, Регистр_ПаллетаОткудаВЗадании} from "../registers/Регистр_ЗаданиеНаПриемку";
 
 //import {BuhtaTaskContextBarcoderScene} from "../scenes/BuhtaTaskContextBarcoderScene";
 
@@ -40,7 +42,6 @@ export interface ITaskConfig {
 }
 
 
-
 export interface ITaskSpecConfig {
     taskSpecName: string;
     докспецВид: number;
@@ -52,7 +53,7 @@ export interface ITaskSpecConfig {
     contextMenuScene?: React.ComponentClass<React.ViewProperties>;
     contextMenuSceneTitle?: string;
     contextMenuSceneVoiceTitle?: string;
-    generates: IGenerate[];
+    generates: I_Генерация[];
 }
 
 
@@ -68,7 +69,8 @@ let Прием_товара_на_паллету: ITaskSpecConfig = {
     voiceCommand: {
         words: "товар",
         number: "REQ"
-    }
+    },
+    generates: []
 }
 
 let Взять_паллету_в_задание: ITaskSpecConfig = {
@@ -84,7 +86,18 @@ let Взять_паллету_в_задание: ITaskSpecConfig = {
     },
     contextMenuScene: BuhtaTaskContextBarcoderScene,
     contextMenuSceneTitle: "Отсканируйте штрих-код паллеты",
-    contextMenuSceneVoiceTitle: "Продиктуйте штрих-код паллеты"
+    contextMenuSceneVoiceTitle: "Продиктуйте штрих-код паллеты",
+    generates: [{
+        ДокспецВид: ВидДокспец_ВзятьПаллетуВЗадание,
+        Кредит:Регистр_НовыеПаллеты,
+        КрОбъект:ГенОбъект.ОбъектШтрихКода,
+        КрКоличество:ГенКоличество.Единица,
+        Дебет:Регистр_ПаллетаОткудаВЗадании,
+        ДбОбъект:ГенОбъект.ОбъектШтрихКода,
+        ДбЗадание:ГенЗадание.Задание,
+        ДбКоличество:ГенКоличество.Единица,
+        Алгоритм: ГенАлгоритм.Нет
+    }]
 }
 
 let Взять_коробку_в_задание: ITaskSpecConfig = {
@@ -100,7 +113,8 @@ let Взять_коробку_в_задание: ITaskSpecConfig = {
     },
     contextMenuScene: BuhtaTaskContextBarcoderScene,
     contextMenuSceneTitle: "Отсканируйте штрих-код коробки",
-    contextMenuSceneVoiceTitle: "Продиктуйте штрих-код коробки"
+    contextMenuSceneVoiceTitle: "Продиктуйте штрих-код коробки",
+    generates: []
 }
 
 
