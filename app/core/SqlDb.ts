@@ -1,4 +1,4 @@
-import {fetch as IFetch} from "react-native";
+
 import * as _ from "lodash";
 import * as moment from "moment";
 import {throwError} from "./Error";
@@ -109,7 +109,6 @@ export class DataRow {//extends DesignedObject {
     //[index: number]: DataType;
 }
 
-declare var fetch: IFetch;
 
 export class SqlDb {
 

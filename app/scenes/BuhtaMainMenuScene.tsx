@@ -1,5 +1,5 @@
 import * as React from "react";
-import {View, Route, ListView} from "react-native";
+
 import {BuhtaCoreScene, IBuhtaCoreSceneProps, BuhtaCoreSceneState} from "./BuhtaCoreScene";
 
 

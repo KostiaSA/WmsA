@@ -3,7 +3,7 @@ import {IBuhtaCoreSceneProps, BuhtaCoreSceneState, BuhtaCoreScene} from "./Buhta
 import {ITaskSpecConfig} from "../config/Tasks";
 import {BuhtaTaskSceneState} from "./BuhtaTaskScene";
 
-import {Text} from "react-native";
+
 import {getSubcontoFromFullBarcode} from "../wms/getSubcontoFromFullBarcode";
 import {ISubconto} from "../interfaces/ISubconto";
 import {runMessage} from "../core/runMessage";
@@ -13,7 +13,7 @@ import {
 } from "../constants/messages";
 import {IMessage} from "../interfaces/IMessage";
 import {getInstantPromise} from "../core/getInstantPromise";
-import Alert = __React.Alert;
+
 import {navigatorView, forceUpdateAll, forcePopToTaskScene} from "../App";
 import {Button, Icon, ListItem, Ripple} from "react-onsenui";
 import {getDevice} from "../core/device";

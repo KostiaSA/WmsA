@@ -5,6 +5,5 @@
 /// <reference path="globals/moment/index.d.ts" />
 /// <reference path="globals/onsenui/index.d.ts" />
 /// <reference path="globals/react-dom/index.d.ts" />
-/// <reference path="globals/react-native/index.d.ts" />
 /// <reference path="globals/react-onsenui/index.d.ts" />
 /// <reference path="globals/react/index.d.ts" />
