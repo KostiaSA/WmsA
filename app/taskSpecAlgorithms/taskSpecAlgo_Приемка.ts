@@ -10,32 +10,32 @@ import {ITaskSpecConfig} from "../config/Tasks";
 import {ISubconto} from "../interfaces/ISubconto";
 import {IMessage} from "../interfaces/IMessage";
 
-export function taskSpecAlgo_Приемка(mode: "run"|"check", taskState: BuhtaTaskSceneState, taskSpecConfig: ITaskSpecConfig, barcode?: ISubconto): Promise<IMessage> {
-    throw  "жопа";
+export function taskSpecAlgo_Приемка(mode: "run"|"check", taskState: BuhtaTaskSceneState, taskSpecConfig: ITaskSpecConfig, barcode: ISubconto): Promise<IMessage> {
+    throw  "жопа17";
 //     let ostFields=[
 //         ["Счет", stringAsSql(РЕГИСТР_ЗАДАНИЕ_НА_ПРИЕМКУ)],
-//         ["ОбъектТип", stringAsSql(context.objectType)],
-//         ["Объект", context.objectId],
+//         ["ОбъектТип", stringAsSql(barcode.type)],
+//         ["Объект", barcode.id],
 //         ["ДоговорПриходаТип", "'Дог'"],
 //         ["ДоговорПрихода", context.prihodDogId],
 //         ["МестоТип", stringAsSql("Нет")],
 //         ["Место", 0],
 //         ["ЗаданиеТип", "'Док'"],
-//         ["Задание", context.taskId],
+//         ["Задание", taskState.props.taskId],
 //         ["СотрудникТип", "'Нет'"],
 //         ["Сотрудник", 0],
 //     ]
 //
 //     let fields = [
 //         ["Дата", "@date"],
-//         ["ДокспецВид", "15000001"],
-//         ["Задание", context.taskId],
+//         ["ДокспецВид", "15000001"],?
+//         ["Задание", taskState.props.taskId],
 //         ["Сотрудник", context.userId],
 //         ["Время", "dbo.ДатаБезВремени(@date)"],
 //
 //         ["КрСчет", stringAsSql(РЕГИСТР_ЗАДАНИЕ_НА_ПРИЕМКУ)],
-//         ["КрОбъектТип", stringAsSql(context.objectType)],
-//         ["КрОбъект", context.objectId],
+//         ["КрОбъектТип", stringAsSql(barcode.type)],
+//         ["КрОбъект", barcode.id],
 //         ["КрДоговорПриходаТип", "'Дог'"],
 //         ["КрДоговорПрихода", context.prihodDogId],
 //         ["КрМестоТип", stringAsSql("Нет")],
@@ -47,8 +47,8 @@ export function taskSpecAlgo_Приемка(mode: "run"|"check", taskState: Buht
 //         ["КрКоличество", 1],
 //
 //         ["ДбСчет", stringAsSql(РЕГИСТР_ОСТАТОК)],
-//         ["ДбОбъектТип", stringAsSql(context.objectType)],
-//         ["ДбОбъект", context.objectId],
+//         ["ДбОбъектТип", stringAsSql(barcode.type)],
+//         ["ДбОбъект", barcode.id],
 //         ["ДбМестоТип", stringAsSql(context.targetType)],
 //         ["ДбМесто", context.targetId],
 //         ["ДбДоговорПриходаТип", "'Дог'"],
@@ -56,7 +56,7 @@ export function taskSpecAlgo_Приемка(mode: "run"|"check", taskState: Buht
 //         ["ДбКоличество", 1],
 //     ];
 //
-//     if (context.runMode === "проверка") {
+//     if (mode === "check") {
 //         //let krFields = fields.filter((item: any)=>item[0].toString().startsWith("Кр") && item[0] !== "КрКоличество");
 //
 //         let sql = `SELECT SUM(Количество) FROM Остаток WHERE ${ emitFieldList_forWhereSql(ostFields)}`;
@@ -69,7 +69,7 @@ export function taskSpecAlgo_Приемка(mode: "run"|"check", taskState: Buht
 //         });
 //
 //     }
-//     else if (context.runMode === "проведение") {
+//     else if (mode === "run") {
 //
 //         let sql = `
 // DECLARE @date DATETIME=GETDATE()

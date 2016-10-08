@@ -12,14 +12,17 @@ export let ВидДокумента_НовыеПаллеты: number = 10001;
 export let ВидДокспец_НоваяПаллета: number = 1;
 
 
+export let Субконто_Нет = {type: "Нет", tableName: ""}
 export let Субконто_Задание = {type: "Док", tableName: "Задание"}
 export let Субконто_Паллета = {type: "PAL", tableName: "Паллета"};
 export let Субконто_Коробка = {type: "BOX", tableName: "Коробка"};
 export let Субконто_Товар = {type: "ТМЦ", tableName: "Товар"};
 export let Субконто_Ячейка = {type: "CEL", tableName: "Ячейка"};
+export let Субконто_Договор = {type: "Дог", tableName: "Договор"}
 
 registerSubconto(Субконто_Задание);
 registerSubconto(Субконто_Паллета);
 registerSubconto(Субконто_Коробка);
 registerSubconto(Субконто_Товар);
 registerSubconto(Субконто_Ячейка);
+registerSubconto(Субконто_Договор);

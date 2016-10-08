@@ -14,6 +14,7 @@ import {
 
 import {ISubcontoType} from "../common/registerSubcontoType";
 import {BuhtaTaskContextBarcoderScene} from "../scenes/BuhtaTaskContextBarcoderScene";
+import {I_Регистр} from "../interfaces/I_Регистр";
 
 //import {BuhtaTaskContextBarcoderScene} from "../scenes/BuhtaTaskContextBarcoderScene";
 
@@ -38,6 +39,8 @@ export interface ITaskConfig {
     specConfig: ITaskSpecConfig[];
 }
 
+
+
 export interface ITaskSpecConfig {
     taskSpecName: string;
     докспецВид: number;
@@ -49,6 +52,7 @@ export interface ITaskSpecConfig {
     contextMenuScene?: React.ComponentClass<React.ViewProperties>;
     contextMenuSceneTitle?: string;
     contextMenuSceneVoiceTitle?: string;
+    generates: IGenerate[];
 }
 
 
