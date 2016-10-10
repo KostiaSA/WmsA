@@ -1,36 +1,22 @@
 import * as _ from "lodash";
-
 import * as React from "react";
-
-
 import {BuhtaCoreScene, IBuhtaCoreSceneProps, BuhtaCoreSceneState} from "./BuhtaCoreScene";
 import {getDb} from "../core/getDb";
 import {DataTable, DataRow} from "../core/SqlDb";
-
-
 import {pushSpeak} from "../core/speak";
-
 import {runMessage} from "../core/runMessage";
 import {
-    СООБЩЕНИЕ_НЕ_ВЫБРАНА_ПАЛЛЕТА_ОТКУДА_БРАТЬ_ТОВАР,
-    СООБЩЕНИЕ_НЕ_ВЫБРАНА_ПАЛЛЕТА_КУДА_ПРИНИМАТЬ_ТОВАР,
     СООБЩЕНИЕ_ШТРИХ_КОД_НЕ_НАЙДЕН,
     СООБЩЕНИЕ_НАЙДЕНО_НЕСКОЛЬКО_ШТРИХ_КОДОВ,
     СООБЩЕНИЕ_ОШИБКА
 } from "../constants/messages";
 import {getSubcontoFromFullBarcode} from "../wms/getSubcontoFromFullBarcode";
-//import {IGenerateTaskSpecContext, GenerateTaskSpecCheckResult} from "../interfaces/IGenerateTaskSpecContext";
 import {throwError} from "../core/Error";
 import {ICommand, getBestMatchCommand} from "../commander/commander";
 import {ITaskConfig, ITaskSpecConfig} from "../config/Tasks";
-//import {BuhtaTaskContextMenuScene, IBuhtaTaskContextMenuSceneProps} from "./BuhtaTaskContextMenuScene";
-
 import {getInstantPromise} from "../core/getInstantPromise";
-import {IMessage} from "../interfaces/IMessage";
 import {stringAsSql} from "../core/SqlCore";
-
 import {Button, ListItem, Ripple} from "react-onsenui";
-import {showToast} from "../core/toast";
 import {IBuhtaTaskContextMenuSceneProps, BuhtaTaskContextMenuScene} from "./BuhtaTaskContextMenuScene";
 import {IRoute} from "../interfaces/IRoute";
 import {navigatorView, forcePopToTaskScene, forceUpdateAll} from "../App";
@@ -39,8 +25,6 @@ import {ISubconto} from "../interfaces/ISubconto";
 import {BuhtaTaskContextBarcoderScene} from "./BuhtaTaskContextBarcoderScene";
 import {Регистр_ЗаданиеНаПриемку, Регистр_ПаллетаКудаВЗадании} from "../registers/Регистр_ЗаданиеНаПриемку";
 import {executeGenProcedure} from "../wms/executeGenProcedure";
-
-//let Text = Text_ as any;
 
 export interface IBuhtaTaskSceneProps extends IBuhtaCoreSceneProps {
     taskConfig: ITaskConfig;
@@ -53,12 +37,9 @@ export interface ITaskSourceTargetPlaceState {
     id: number;
     name: string;
     kol: number;
-//    isActive: boolean;
 }
 
 export class BuhtaTaskSceneState extends BuhtaCoreSceneState<IBuhtaTaskSceneProps> {
-    // scene: BuhtaTaskScene;
-    // props: IBuhtaTaskSceneProps;
     dogId: number;
     percent: number;
     sourcePlaces: ITaskSourceTargetPlaceState[] = [];
@@ -166,7 +147,6 @@ export class BuhtaTaskSceneState extends BuhtaCoreSceneState<IBuhtaTaskSceneProp
             ret = ret.concat(this.props.taskConfig.targetPlacesConfig.allowedSubcontos.map((item: ISubcontoType)=>item.type));
 
         ret = ret.concat(this.props.taskConfig.specConfig.map((item: ITaskSpecConfig)=>item.objectSubcontoType.type));
-        //alert(ret.join("+"));
         return _.uniq(ret);
     }
 
@@ -195,9 +175,7 @@ export class BuhtaTaskSceneState extends BuhtaCoreSceneState<IBuhtaTaskSceneProp
                 let spec = this.props.taskConfig.specConfig[j];
                 if (spec.autoByBarcoder === true && spec.objectSubcontoType.type === subconto.type) {
                     // нашли нужное действие, проверяем его на выполнимость (check) и выполняем (run)
-
                     return executeGenProcedure(this, spec, subconto)
-                    //this.props.taskSpecConfig.generateTaskSpecAlgorithm("check", this.props.taskState, this.props.taskSpecConfig, subconto[0])
                         .then((result: string)=> {
 
                             if (result === "Ok") {
@@ -212,32 +190,11 @@ export class BuhtaTaskSceneState extends BuhtaCoreSceneState<IBuhtaTaskSceneProp
                                     toast: result
                                 });
                             }
-                            //navigatorView.popPage();
-                            //return;
                         })
                         .catch((err)=> {
                             alert(err);
                             runMessage(СООБЩЕНИЕ_ОШИБКА);
-                            //navigatorView.popPage();
-                            //return;
                         });
-
-
-                    // return spec.generateTaskSpecAlgorithm("check", this, spec, subconto)
-                    //     .then((resultMessage: IMessage)=> {
-                    //         if (resultMessage.isError === true) {
-                    //             runMessage(resultMessage);
-                    //             return getInstantPromise<void>();
-                    //         }
-                    //         else {
-                    //             return spec.generateTaskSpecAlgorithm("run", this, spec, subconto)
-                    //                 .then((resultMessage: IMessage)=> {
-                    //                     runMessage(resultMessage);
-                    //                     return;
-                    //                 });
-                    //
-                    //         }
-                    //     });
                 }
             }
         }
@@ -252,72 +209,6 @@ export class BuhtaTaskSceneState extends BuhtaCoreSceneState<IBuhtaTaskSceneProp
 
     }
 
-    // handleSubcontoScan_old(type: ISubcontoType[]): Promise<void> {
-    //     return new Promise<void>(
-    //         (resolve: () => void, reject: (error: string) => void) => {
-    //
-    //             if (!this.isSourcePlacesStateOk()) {
-    //                 runMessage(СООБЩЕНИЕ_НЕ_ВЫБРАНА_ПАЛЛЕТА_ОТКУДА_БРАТЬ_ТОВАР);
-    //                 reject(СООБЩЕНИЕ_НЕ_ВЫБРАНА_ПАЛЛЕТА_ОТКУДА_БРАТЬ_ТОВАР.toast!);
-    //             }
-    //             if (!this.isTargetPlacesStateOk()) {
-    //                 runMessage(СООБЩЕНИЕ_НЕ_ВЫБРАНА_ПАЛЛЕТА_КУДА_ПРИНИМАТЬ_ТОВАР);
-    //                 reject(СООБЩЕНИЕ_НЕ_ВЫБРАНА_ПАЛЛЕТА_КУДА_ПРИНИМАТЬ_ТОВАР.toast!);
-    //             }
-    //
-    //             // если source отсутствует (приемка), то требуется полное совпадение штрих-кода
-    //             if (this.props.taskConfig.sourcePlacesConfig === undefined || this.props.taskConfig.sourcePlacesConfig.allowedCount === "none") {
-    //                 if (type.length > 1) {
-    //                     runMessage(СООБЩЕНИЕ_НАЙДЕНО_НЕСКОЛЬКО_ШТРИХ_КОДОВ);
-    //                     reject(СООБЩЕНИЕ_НАЙДЕНО_НЕСКОЛЬКО_ШТРИХ_КОДОВ.toast!);
-    //                 }
-    //             }
-    //
-    //
-    //             let context: IGenerateTaskSpecContext = {
-    //                 runMode: "проверка",
-    //                 taskId: this.props.taskId,
-    //                 userId: this.props.userId,
-    //                 sourceType: this.getActiveSourcePlace().type,
-    //                 sourceId: this.getActiveSourcePlace().id,
-    //                 targetType: this.getActiveTargetPlace().type,
-    //                 targetId: this.getActiveTargetPlace().id,
-    //                 objectType: type[0].type,
-    //                 objectId: type[0].id,
-    //                 prihodDogId: this.dogId
-    //             }
-    //
-    //             // проверяем на корректность
-    //             // this.props.taskConfig.generateTaskSpecAlgorithm(context)
-    //             //     .then((checkResult: GenerateTaskSpecCheckResult)=> {
-    //             //         if (checkResult === "ok") {
-    //             //             context.runMode = "проведение";
-    //             //             this.props.taskConfig.generateTaskSpecAlgorithm(context).then((checkResult: GenerateTaskSpecCheckResult) => {
-    //             //                 if (checkResult === "ok")
-    //             //                     resolve();
-    //             //                 else
-    //             //                     throw checkResult;
-    //             //
-    //             //             });
-    //             //         }
-    //             //         else {
-    //             //             runMessage({
-    //             //                 sound: "error.mp3",
-    //             //                 voice: checkResult,
-    //             //                 toast: checkResult,
-    //             //             });
-    //             //             resolve();
-    //             //         }
-    //             //     })
-    //             //     .catch((error: any)=> {
-    //             //         reject(error);
-    //             //     });
-    //
-    //
-    //         });
-    //
-    //
-    // }
 
     getEmptyPlaceState(): ITaskSourceTargetPlaceState {
         let ret: ITaskSourceTargetPlaceState = {
@@ -509,45 +400,6 @@ export class TaskStep_Приемка extends TaskStep {
                 </tbody>
             </table>
         );
-        //return <div>TaskStep_Приемка </div>;
-        // return (
-        //     <View>
-        //         <View>
-        //             <Grid>
-        //                 <Col style={firstColStyle}>
-        //                     <Text style={captionStyle}>опер.</Text>
-        //                 </Col>
-        //                 <Col>
-        //                     <Text style={actionStyle}>приемка товара</Text>
-        //                 </Col>
-        //             </Grid>
-        //         </View>
-        //         <View>
-        //             <Grid>
-        //                 <Col style={firstColStyle}>
-        //                     <TouchableNativeFeedback onPress={(()=>{pushSpeak(this.objectName)}).bind(this)}>
-        //                         <View>
-        //                             <Text style={captionStyle}>товар</Text>
-        //                         </View>
-        //                     </TouchableNativeFeedback>
-        //                 </Col>
-        //                 <Col>
-        //                     <Text style={{ color:"slategray", lineHeight:16}}>{this.objectName}</Text>
-        //                 </Col>
-        //             </Grid>
-        //         </View>
-        //         <View>
-        //             <Grid>
-        //                 <Col style={firstColStyle}>
-        //                     <Text style={captionStyle}>кол-во</Text>
-        //                 </Col>
-        //                 <Col>
-        //                     <Text style={{ color:"royalblue"}}>{this.kol} шт.</Text>
-        //                 </Col>
-        //             </Grid>
-        //         </View>
-        //     </View>
-        //);
     }
 
 }
@@ -560,14 +412,6 @@ export class BuhtaTaskScene extends BuhtaCoreScene<IBuhtaTaskSceneProps, BuhtaTa
         this.props = props;
         this.context = context;
         this.state = new BuhtaTaskSceneState(props, this);
-
-        // this.state.targetPlaces[0] = {
-        //     type: "PAL",
-        //     id: 101,
-        //     name: "Паллета 00101",
-        //     isActive: true
-        // };
-
     }
 
     reloadScene() {
