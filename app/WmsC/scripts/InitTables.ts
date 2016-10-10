@@ -16,6 +16,7 @@ import {
 } from "../config/tables/Остаток";
 import {loadWmsConfigApp} from "../loadWmsConfigApp";
 import {create_table_ШтрихКод} from "../config/tables/ШтрихКод";
+import {init_table_Сотрудник} from "../config/tables/Сотрудник";
 
 loadWmsConfigApp();
 
@@ -25,6 +26,9 @@ init_table_Задание()
     })
     .then(()=>{
         return init_table_Товар();
+    })
+    .then(()=>{
+        return init_table_Сотрудник();
     })
     .then(()=>{
         return init_table_Паллета();

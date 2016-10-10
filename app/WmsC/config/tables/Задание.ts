@@ -1,6 +1,8 @@
 import {getIsExistsBuhtaView, executeWmsSql, getIsExistsWmsView} from "../../core/MsSqlDb";
 import {consoleError, consoleOk} from "../../core/console";
 import {BuhtaDatabase} from "../SqlConnections";
+import {stringAsSql} from "../../../core/SqlCore";
+import {Субконто_Задание} from "../../../common/Buhta";
 //import {registerSubconto} from "../../common/registerSubcontoType";
 
 
@@ -16,6 +18,7 @@ export function init_table_Задание(): Promise<void> {
                 ${create} VIEW Задание AS
                 SELECT
                   Ключ,
+                  ${stringAsSql(Субконто_Задание.type)} ТипСубконто,
                   Вид as ДокументВид, 
                   Договор, 
                   LTRIM(STR(Ключ)) as Номер,

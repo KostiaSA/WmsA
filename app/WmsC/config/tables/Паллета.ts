@@ -6,7 +6,11 @@ import {consoleError, consoleOk} from "../../core/console";
 import {BuhtaDatabase} from "../SqlConnections";
 //import {registerSubconto} from "../../common/registerSubcontoType";
 import {emitFieldList} from "../../core/emit";
-import {ВидДокумента_НовыеПаллеты, ВидДокспец_НоваяПаллета, Бухта_ЮрЛицо} from "../../../common/Buhta";
+import {
+    ВидДокумента_НовыеПаллеты, ВидДокспец_НоваяПаллета, Бухта_ЮрЛицо,
+    Субконто_Паллета
+} from "../../../common/Buhta";
+import {stringAsSql} from "../../../core/SqlCore";
 //import {Бухта_ЮрЛицо, ВидДокумента_НовыеПаллеты, ВидДокспец_НоваяПаллета} from "../../common/Buhta";
 
 
@@ -21,7 +25,7 @@ export function init_table_Паллета(): Promise<void> {
             let sql = `
                 ${create} VIEW Паллета AS
                 SELECT
-                  'PAL' ТипСубконто,
+                  ${stringAsSql(Субконто_Паллета.type)} ТипСубконто,
                   Ключ,
                   Ключ as Номер,
                   'Паллета '+LTRIM(STR(Ключ)) as Название,

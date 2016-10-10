@@ -1,6 +1,8 @@
 import {getIsExistsBuhtaView, executeWmsSql, getIsExistsWmsView} from "../../core/MsSqlDb";
 import {consoleError, consoleOk} from "../../core/console";
 import {BuhtaDatabase} from "../SqlConnections";
+import {stringAsSql} from "../../../core/SqlCore";
+import {Субконто_Товар} from "../../../common/Buhta";
 //import {registerSubconto} from "../../common/registerSubcontoType";
 
 
@@ -16,7 +18,7 @@ export function init_table_Товар(): Promise<void> {
             let sql = `
                 ${create} VIEW Товар AS
                 SELECT
-                  'ТМЦ' ТипСубконто,
+                  ${stringAsSql(Субконто_Товар.type)} ТипСубконто,
                   Ключ,
                   Номер,
                   Название,
