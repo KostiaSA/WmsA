@@ -33,11 +33,12 @@ import {Button, ListItem, Ripple} from "react-onsenui";
 import {showToast} from "../core/toast";
 import {IBuhtaTaskContextMenuSceneProps, BuhtaTaskContextMenuScene} from "./BuhtaTaskContextMenuScene";
 import {IRoute} from "../interfaces/IRoute";
-import {navigatorView} from "../App";
+import {navigatorView, forcePopToTaskScene, forceUpdateAll} from "../App";
 import {ISubcontoType} from "../common/registerSubcontoType";
 import {ISubconto} from "../interfaces/ISubconto";
 import {BuhtaTaskContextBarcoderScene} from "./BuhtaTaskContextBarcoderScene";
 import {Регистр_ЗаданиеНаПриемку, Регистр_ПаллетаКудаВЗадании} from "../registers/Регистр_ЗаданиеНаПриемку";
+import {executeGenProcedure} from "../wms/executeGenProcedure";
 
 //let Text = Text_ as any;
 
@@ -188,37 +189,65 @@ export class BuhtaTaskSceneState extends BuhtaCoreSceneState<IBuhtaTaskSceneProp
 
     handleSubcontoScan(subcontos: ISubconto[]): Promise<void> {
 
-        // for (let i = 0; i < subcontos.length; i++) {
-        //     let subconto = subcontos[i];
-        //     for (let j = 0; j < this.props.taskConfig.specConfig.length; j++) {
-        //         let spec = this.props.taskConfig.specConfig[j];
-        //         if (spec.autoByBarcoder === true && spec.objectSubcontoType.type === subconto.type) {
-        //             // нашли нужное действие, проверяем его на выполнимость (check) и выполняем (run)
-        //             return spec.generateTaskSpecAlgorithm("check", this, spec, subconto)
-        //                 .then((resultMessage: IMessage)=> {
-        //                     if (resultMessage.isError === true) {
-        //                         runMessage(resultMessage);
-        //                         return getInstantPromise<void>();
-        //                     }
-        //                     else {
-        //                         return spec.generateTaskSpecAlgorithm("run", this, spec, subconto)
-        //                             .then((resultMessage: IMessage)=> {
-        //                                 runMessage(resultMessage);
-        //                                 return;
-        //                             });
-        //
-        //                     }
-        //                 });
-        //         }
-        //     }
-        // }
-        //
-        // // не нашли нужное действие
-        // runMessage({
-        //     sound: "error.mp3",
-        //     voice: "Штрих код не подходит",
-        //     toast: "Штрих код не подходит"
-        // });
+        for (let i = 0; i < subcontos.length; i++) {
+            let subconto = subcontos[i];
+            for (let j = 0; j < this.props.taskConfig.specConfig.length; j++) {
+                let spec = this.props.taskConfig.specConfig[j];
+                if (spec.autoByBarcoder === true && spec.objectSubcontoType.type === subconto.type) {
+                    // нашли нужное действие, проверяем его на выполнимость (check) и выполняем (run)
+
+                    return executeGenProcedure(this, spec, subconto)
+                    //this.props.taskSpecConfig.generateTaskSpecAlgorithm("check", this.props.taskState, this.props.taskSpecConfig, subconto[0])
+                        .then((result: string)=> {
+
+                            if (result === "Ok") {
+                                runMessage(spec.genOkMessage);
+                                //forcePopToTaskScene();
+                                forceUpdateAll();
+                            }
+                            else {
+                                runMessage({
+                                    sound: "error.mp3",
+                                    voice: result,
+                                    toast: result
+                                });
+                            }
+                            //navigatorView.popPage();
+                            //return;
+                        })
+                        .catch((err)=> {
+                            alert(err);
+                            runMessage(СООБЩЕНИЕ_ОШИБКА);
+                            //navigatorView.popPage();
+                            //return;
+                        });
+
+
+                    // return spec.generateTaskSpecAlgorithm("check", this, spec, subconto)
+                    //     .then((resultMessage: IMessage)=> {
+                    //         if (resultMessage.isError === true) {
+                    //             runMessage(resultMessage);
+                    //             return getInstantPromise<void>();
+                    //         }
+                    //         else {
+                    //             return spec.generateTaskSpecAlgorithm("run", this, spec, subconto)
+                    //                 .then((resultMessage: IMessage)=> {
+                    //                     runMessage(resultMessage);
+                    //                     return;
+                    //                 });
+                    //
+                    //         }
+                    //     });
+                }
+            }
+        }
+
+        // не нашли нужное действие
+        runMessage({
+            sound: "error.mp3",
+            voice: "Штрих код не подходит",
+            toast: "Штрих код не подходит"
+        });
         return getInstantPromise<void>();
 
     }
