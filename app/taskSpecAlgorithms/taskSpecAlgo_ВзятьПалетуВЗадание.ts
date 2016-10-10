@@ -73,7 +73,7 @@ export function taskSpecAlgo_ВзятьПаллетуВЗадание(mode: "run
 
             let fields = [
                 ["Дата", "@date"],
-                ["ДокспецВид", taskState.props.taskConfig.документВид * 1000 + taskSpecConfig.докспецВид],
+              //  ["ДокспецВид", taskState.props.taskConfig.документВид * 1000 + taskSpecConfig.докспецВид],
                 ["Задание", taskState.props.taskId],
                 ["Сотрудник", taskState.props.userId],
                 ["Время", "dbo.ДатаБезВремени(@date)"],

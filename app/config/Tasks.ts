@@ -44,7 +44,7 @@ export interface ITaskConfig {
 
 export interface ITaskSpecConfig {
     taskSpecName: string;
-    докспецВид: number;
+    //докспецВид: number;
     objectSubcontoType: ISubcontoType;
     //generateTaskSpecAlgorithm: IGenerateTaskSpecAlgorithm;
     autoByBarcoder: boolean;
@@ -61,10 +61,10 @@ export let TaskConfigs: ITaskConfig[] = [];
 
 let Прием_товара_на_паллету: ITaskSpecConfig = {
     taskSpecName: "Принять товар",
-    докспецВид: ВидДокспец_ПриемТовара,
+    //докспецВид: ВидДокспец_ПриемТовара,
     objectSubcontoType: Субконто_Товар,
     autoByBarcoder: true,
-   // generateTaskSpecAlgorithm: taskSpecAlgo_Приемка,
+    // generateTaskSpecAlgorithm: taskSpecAlgo_Приемка,
     showInContextMenu: false,
     voiceCommand: {
         words: "товар",
@@ -75,10 +75,10 @@ let Прием_товара_на_паллету: ITaskSpecConfig = {
 
 let Взять_паллету_в_задание: ITaskSpecConfig = {
     taskSpecName: "Взять паллету в задание",
-    докспецВид: ВидДокспец_ВзятьПаллетуВЗадание,
+    //докспецВид: ВидДокспец_ВзятьПаллетуВЗадание,
     objectSubcontoType: Субконто_Паллета,
     autoByBarcoder: false,
-   // generateTaskSpecAlgorithm: taskSpecAlgo_ВзятьПаллетуВЗадание,
+    // generateTaskSpecAlgorithm: taskSpecAlgo_ВзятьПаллетуВЗадание,
     showInContextMenu: true,
     voiceCommand: {
         words: "взять паллету",
@@ -89,20 +89,24 @@ let Взять_паллету_в_задание: ITaskSpecConfig = {
     contextMenuSceneVoiceTitle: "Продиктуйте штрих-код паллеты",
     generates: [{
         ДокспецВид: ВидДокспец_ВзятьПаллетуВЗадание,
-        Кредит:Регистр_НовыеПаллеты,
-        КрОбъект:ГенОбъект.ОбъектШтрихКода,
-        КрКоличество:ГенКоличество.Единица,
-        Дебет:Регистр_ПаллетаОткудаВЗадании,
-        ДбОбъект:ГенОбъект.ОбъектШтрихКода,
-        ДбЗадание:ГенЗадание.Задание,
-        ДбКоличество:ГенКоличество.Единица,
+        Кредит: {
+            Счет: Регистр_НовыеПаллеты,
+            Объект: ГенОбъект.ОбъектШтрихКода,
+            Количество: ГенКоличество.Единица
+        },
+        Дебет: {
+            Счет: Регистр_ПаллетаОткудаВЗадании,
+            Объект: ГенОбъект.ОбъектШтрихКода,
+            Задание: ГенЗадание.Задание,
+            Количество: ГенКоличество.Единица
+        },
         Алгоритм: ГенАлгоритм.Нет
     }]
 }
 
 let Взять_коробку_в_задание: ITaskSpecConfig = {
     taskSpecName: "Взять коробку в задание",
-    докспецВид: ВидДокспец_ВзятьКоробкуВЗадание,
+    //докспецВид: ВидДокспец_ВзятьКоробкуВЗадание,
     objectSubcontoType: Субконто_Коробка,
     autoByBarcoder: false,
     //generateTaskSpecAlgorithm: taskSpecAlgo_ВзятьПаллетуВЗадание,
@@ -111,7 +115,7 @@ let Взять_коробку_в_задание: ITaskSpecConfig = {
         words: "взять коробку",
         number: "REQ"
     },
-  //  contextMenuScene: BuhtaTaskContextBarcoderScene,
+    //  contextMenuScene: BuhtaTaskContextBarcoderScene,
     contextMenuSceneTitle: "Отсканируйте штрих-код коробки",
     contextMenuSceneVoiceTitle: "Продиктуйте штрих-код коробки",
     generates: []

@@ -639,7 +639,7 @@ export class BuhtaTaskScene extends BuhtaCoreScene<IBuhtaTaskSceneProps, BuhtaTa
                 }, this);
 
                 ret.push(
-                    <tr>
+                    <tr key="0">
                         <td>
                             <div style={{textAlign: "center"}}>
                                 <div
@@ -669,7 +669,7 @@ export class BuhtaTaskScene extends BuhtaCoreScene<IBuhtaTaskSceneProps, BuhtaTa
                     active = <div></div>;
 
                 ret.push(
-                    <tr onTouchEnd={()=>{this.state.handleTargetPlaceClick(index); navigator.vibrate(100);}}>
+                    <tr key={index} onTouchEnd={()=>{this.state.handleTargetPlaceClick(index); navigator.vibrate(100);}}>
                         <td> {active}</td>
                         <td><img src="img/pallete.png"/></td>
                         <td style={{paddingLeft: 5}}>{target.name}{targetKolStr}</td>
