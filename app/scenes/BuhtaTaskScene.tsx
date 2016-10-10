@@ -59,6 +59,7 @@ export class BuhtaTaskSceneState extends BuhtaCoreSceneState<IBuhtaTaskSceneProp
     // scene: BuhtaTaskScene;
     // props: IBuhtaTaskSceneProps;
     dogId: number;
+    percent: number;
     sourcePlaces: ITaskSourceTargetPlaceState[] = [];
     targetPlaces: ITaskSourceTargetPlaceState[] = [];
     activeSourceId: string | undefined;
@@ -340,7 +341,10 @@ export class BuhtaTaskSceneState extends BuhtaCoreSceneState<IBuhtaTaskSceneProp
 -- набор 0 шапка        
 SELECT 
    Номер,
-   Договор     
+   Договор,
+   ISNULL(
+   (SELECT SUM(КрКоличество)*100.00 FROM ЗаданиеСпец WHERE Задание=${this.props.taskId} AND КрСчет=${stringAsSql(Регистр_ЗаданиеНаПриемку.Счет)})/
+   (SELECT SUM(ДбКоличество)+0.00001 FROM ЗаданиеСпец WHERE Задание=${this.props.taskId} AND ДбСчет=${stringAsSql(Регистр_ЗаданиеНаПриемку.Счет)}),0) Процент     
 FROM Задание 
 WHERE Ключ=${this.props.taskId}    
         
@@ -388,6 +392,7 @@ ORDER BY Порядок
                 // набор 0 шапка
                 let taskRow = tables[0].rows[0];
                 this.dogId = taskRow.value("Договор");
+                this.percent = taskRow.value("Процент");
 
                 // набор 1 состав задания
                 this.steps = [];
@@ -548,9 +553,41 @@ export class BuhtaTaskScene extends BuhtaCoreScene<IBuhtaTaskSceneProps, BuhtaTa
 
 
     renderTaskHeader(): JSX.Element {
-        return (
-            <div> Шапка задания {this.props.taskId} </div>
-        )
+        if (!this.state.isStepsLoaded)
+            return <div>загрузка...</div>
+        else
+            return (
+                <div>
+                    <table>
+                        <tbody>
+                        <tr>
+                            <td>
+                                задание N
+                            </td>
+                            <td>
+                                {this.props.taskId}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                тип
+                            </td>
+                            <td>
+                                {this.props.taskConfig.taskName}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                выполнено
+                            </td>
+                            <td>
+                                {this.state.percent.toFixed(0)}%
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            )
     }
 
     renderIncompleteSteps(): JSX.Element {
@@ -589,20 +626,20 @@ export class BuhtaTaskScene extends BuhtaCoreScene<IBuhtaTaskSceneProps, BuhtaTa
 
     }
 
-    handlePressXXX = (spec: ITaskSpecConfig)=> {
+    handlePressContext = (spec: ITaskSpecConfig)=> {
 
-            let sceneProps = {
-                title: spec.contextMenuSceneTitle,
-                taskState: this.state,
-                taskSpecConfig: spec
-            }
+        let sceneProps = {
+            title: spec.contextMenuSceneTitle,
+            taskState: this.state,
+            taskSpecConfig: spec
+        }
 
-            let route: IRoute = {
-                component: BuhtaTaskContextBarcoderScene,
-                componentProps: sceneProps,
-            };
-            navigatorView.pushPage(route);
-            }
+        let route: IRoute = {
+            component: BuhtaTaskContextBarcoderScene,
+            componentProps: sceneProps,
+        };
+        navigatorView.pushPage(route);
+    }
 
 
     renderTargets = (): JSX.Element | null => {
@@ -631,7 +668,7 @@ export class BuhtaTaskScene extends BuhtaCoreScene<IBuhtaTaskSceneProps, BuhtaTa
                         <Button
                             key={index}
                             style={{marginTop: 5}}
-                            onClick={()=>{navigator.vibrate(100); this.handlePressXXX(taskSpec)}}
+                            onClick={()=>{navigator.vibrate(100); this.handlePressContext(taskSpec)}}
                         >
                             {taskSpec.taskSpecName}
                         </Button>
@@ -669,7 +706,8 @@ export class BuhtaTaskScene extends BuhtaCoreScene<IBuhtaTaskSceneProps, BuhtaTa
                     active = <div></div>;
 
                 ret.push(
-                    <tr key={index} onTouchEnd={()=>{this.state.handleTargetPlaceClick(index); navigator.vibrate(100);}}>
+                    <tr key={index}
+                        onTouchEnd={()=>{this.state.handleTargetPlaceClick(index); navigator.vibrate(100);}}>
                         <td> {active}</td>
                         <td><img src="img/pallete.png"/></td>
                         <td style={{paddingLeft: 5}}>{target.name}{targetKolStr}</td>

@@ -18,7 +18,7 @@ export let developerModeBarcodes:IDeveloperModeBarcode[]=[
     {type: Субконто_Паллета, barcode:"PAL042183"},
 
     {type: Субконто_Товар, barcode:"2000000818115"},
-    {type: Субконто_Товар, barcode:"2000000818115"},
+    {type: Субконто_Товар, barcode:"2000000827209"},
     {type: Субконто_Товар, barcode:"2000000857442"},
 ]
 
