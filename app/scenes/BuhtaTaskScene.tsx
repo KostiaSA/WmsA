@@ -28,7 +28,6 @@ import {ITaskConfig, ITaskSpecConfig} from "../config/Tasks";
 import {getInstantPromise} from "../core/getInstantPromise";
 import {IMessage} from "../interfaces/IMessage";
 import {stringAsSql} from "../core/SqlCore";
-import {РЕГИСТР_ПАЛЛЕТА_В_ЗАДАНИИ, РЕГИСТР_ЗАДАНИЕ_НА_ПРИЕМКУ} from "../constants/registers";
 
 import {Button, ListItem, Ripple} from "react-onsenui";
 import {showToast} from "../core/toast";
@@ -37,6 +36,8 @@ import {IRoute} from "../interfaces/IRoute";
 import {navigatorView} from "../App";
 import {ISubcontoType} from "../common/registerSubcontoType";
 import {ISubconto} from "../interfaces/ISubconto";
+import {BuhtaTaskContextBarcoderScene} from "./BuhtaTaskContextBarcoderScene";
+import {Регистр_ЗаданиеНаПриемку, Регистр_ПаллетаКудаВЗадании} from "../registers/Регистр_ЗаданиеНаПриемку";
 
 //let Text = Text_ as any;
 
@@ -361,7 +362,7 @@ SELECT
    dbo.СубконтоНазвание(ОбъектТип,Объект) ОбъектНазвание
 FROM Остаток
 WHERE 
-   Счет=${stringAsSql(РЕГИСТР_ЗАДАНИЕ_НА_ПРИЕМКУ)} AND
+   Счет=${stringAsSql(Регистр_ЗаданиеНаПриемку.Счет)} AND
    ЗаданиеТип='Док' AND Задание=${this.props.taskId} AND
    ((СотрудникТип='Чел' AND Сотрудник=${this.props.userId}) OR (СотрудникТип='Нет') )
      
@@ -373,7 +374,7 @@ SELECT
    dbo.СубконтоХранитКоличество(ОбъектТип,Объект) Количество
 FROM Остаток
 WHERE 
-   Счет=${stringAsSql(РЕГИСТР_ПАЛЛЕТА_В_ЗАДАНИИ)} AND
+   Счет=${stringAsSql(Регистр_ПаллетаКудаВЗадании.Счет)} AND
    ЗаданиеТип='Док' AND Задание=${this.props.taskId}
 ORDER BY Порядок         
     `;
@@ -589,7 +590,7 @@ export class BuhtaTaskScene extends BuhtaCoreScene<IBuhtaTaskSceneProps, BuhtaTa
     }
 
     handlePressXXX = (spec: ITaskSpecConfig)=> {
-        if (spec.contextMenuScene !== undefined) {
+
             let sceneProps = {
                 title: spec.contextMenuSceneTitle,
                 taskState: this.state,
@@ -597,12 +598,11 @@ export class BuhtaTaskScene extends BuhtaCoreScene<IBuhtaTaskSceneProps, BuhtaTa
             }
 
             let route: IRoute = {
-                component: spec.contextMenuScene,
+                component: BuhtaTaskContextBarcoderScene,
                 componentProps: sceneProps,
             };
             navigatorView.pushPage(route);
-        }
-    }
+            }
 
 
     renderTargets = (): JSX.Element | null => {

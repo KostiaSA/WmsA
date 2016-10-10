@@ -7,6 +7,8 @@ import {consoleError, consoleOk} from "../../core/console";
 //import {registerSubconto} from "../../common/registerSubcontoType";
 import {emitFieldList} from "../../core/emit";
 import {ВидДокумента_НовыеПаллеты, Бухта_ЮрЛицо, ВидДокспец_НоваяПаллета} from "../../../common/Buhta";
+import {stringAsSql} from "../../../core/SqlCore";
+import {Регистр_НовыеПаллеты} from "../../../registers/Регистр_ЗаданиеНаПриемку";
 //import {Бухта_ЮрЛицо, ВидДокумента_НовыеПаллеты, ВидДокспец_НоваяПаллета} from "../../common/Buhta";
 
 
@@ -27,7 +29,7 @@ export function перевод_паллет_в_новые_42150_42185(): Promise
         ["Дата", "@дата"],
         ["Время", "@время"],
         ["Задание", "@новоеЗадание"],
-        ["ДбСчет", "'НовыеПал'"],
+        ["ДбСчет", stringAsSql(Регистр_НовыеПаллеты.Счет)],
         ["ДбОбъектТип", "'PAL'"],
         ["ДбОбъект", "Паллета.Ключ"],
         ["ДбКоличество", 1],

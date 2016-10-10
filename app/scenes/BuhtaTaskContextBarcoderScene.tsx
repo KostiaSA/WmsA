@@ -18,6 +18,7 @@ import {navigatorView, forceUpdateAll, forcePopToTaskScene} from "../App";
 import {Button, Icon, ListItem, Ripple} from "react-onsenui";
 import {getDevice} from "../core/device";
 import {getDeveloperMode} from "../core/developerMode";
+import {executeGenProcedure} from "../wms/executeGenProcedure";
 
 export interface IBuhtaTaskContextBarcoderSceneProps extends IBuhtaCoreSceneProps {
     taskState: BuhtaTaskSceneState;
@@ -34,66 +35,61 @@ export class BuhtaTaskContextBarcoderScene extends BuhtaCoreScene<IBuhtaTaskCont
     closingState: boolean;
 
     handleBarcodeReceived = (e: any) => {
-        // if (!this.closingState) {
-        //     console.log("handleBarcodeReceived");
-        //     console.log(e);
-        //     getSubcontoFromFullBarcode(e.data, [this.props.taskSpecConfig.objectSubcontoType.type])
-        //         .then((subconto: ISubconto[])=> {
-        //             if (subconto.length === 0) {
-        //                 runMessage(СООБЩЕНИЕ_ШТРИХ_КОД_НЕ_НАЙДЕН);
-        //                 //navigatorView.popPage();
-        //                 //return
-        //             }
-        //             else if (subconto.length > 1) {
-        //                 runMessage(СООБЩЕНИЕ_НАЙДЕНО_НЕСКОЛЬКО_ШТРИХ_КОДОВ);
-        //                 //navigatorView.popPage();
-        //                 //return
-        //             }
-        //             else {
-        //
-        //                 this.props.taskSpecConfig.generateTaskSpecAlgorithm("check", this.props.taskState, this.props.taskSpecConfig, subconto[0])
-        //                     .then((resultMessage: IMessage)=> {
-        //                         if (resultMessage.isError === true) {
-        //                             runMessage(resultMessage);
-        //                             //navigatorView.popPage();
-        //                             //return;
-        //                         }
-        //                         else {
-        //                             this.props.taskSpecConfig.generateTaskSpecAlgorithm("run", this.props.taskState, this.props.taskSpecConfig, subconto[0])
-        //                                 .then((resultMessage: IMessage)=> {
-        //                                     runMessage(resultMessage);
-        //                                     forcePopToTaskScene();
-        //                                     forceUpdateAll();
-        //                                     //navigatorView.popPage();
-        //                                     //return;
-        //                                 })
-        //                                 .catch((err)=> {
-        //                                     alert(err);
-        //                                     runMessage(СООБЩЕНИЕ_ОШИБКА);
-        //                                     //navigatorView.popPage();
-        //                                     //return;
-        //                                 });
-        //                         }
-        //                     })
-        //                     .catch((err)=> {
-        //                         alert(err);
-        //                         runMessage(СООБЩЕНИЕ_ОШИБКА);
-        //                         //navigatorView.popPage();
-        //                         //return;
-        //                     });
-        //             }
-        //
-        //         })
-        //         .catch((error: any)=> {
-        //             alert(error);
-        //             //runMessage(СООБЩЕНИЕ_ОШИБКА);
-        //             //return;
-        //         });
-        //
-        //     //navigatorView.popPage();
-        //     this.closingState = true;  // BarcodeScanner выдает несколько раз подряд одно и тоже значение, обрубаем
-        //     //navigatorView.popPage();
-        // }
+        //alert("да это здесь");
+        if (!this.closingState) {
+            console.log("handleBarcodeReceived");
+            console.log(e);
+            getSubcontoFromFullBarcode(e.data, [this.props.taskSpecConfig.objectSubcontoType.type])
+                .then((subconto: ISubconto[])=> {
+                    if (subconto.length === 0) {
+                        runMessage(СООБЩЕНИЕ_ШТРИХ_КОД_НЕ_НАЙДЕН);
+                        //navigatorView.popPage();
+                        //return
+                    }
+                    else if (subconto.length > 1) {
+                        runMessage(СООБЩЕНИЕ_НАЙДЕНО_НЕСКОЛЬКО_ШТРИХ_КОДОВ);
+                        //navigatorView.popPage();
+                        //return
+                    }
+                    else {
+                        executeGenProcedure(this.props.taskState, this.props.taskSpecConfig, subconto[0])
+                        //this.props.taskSpecConfig.generateTaskSpecAlgorithm("check", this.props.taskState, this.props.taskSpecConfig, subconto[0])
+                            .then((result: string)=> {
+
+                                if (result === "Ok") {
+                                    runMessage(this.props.taskSpecConfig.genOkMessage);
+                                    forcePopToTaskScene();
+                                    forceUpdateAll();
+                                }
+                                else {
+                                    runMessage({
+                                        sound: "error.mp3",
+                                        voice: result,
+                                        toast: result
+                                    });
+                                }
+                                //navigatorView.popPage();
+                                //return;
+                            })
+                            .catch((err)=> {
+                                alert(err);
+                                runMessage(СООБЩЕНИЕ_ОШИБКА);
+                                //navigatorView.popPage();
+                                //return;
+                            });
+                    }
+
+                })
+                .catch((error: any)=> {
+                    alert(error);
+                    //runMessage(СООБЩЕНИЕ_ОШИБКА);
+                    //return;
+                });
+
+            //navigatorView.popPage();
+            this.closingState = true;  // BarcodeScanner выдает несколько раз подряд одно и тоже значение, обрубаем
+            //navigatorView.popPage();
+        }
     }
 
     handleVoiceButton = () => {
@@ -110,7 +106,7 @@ export class BuhtaTaskContextBarcoderScene extends BuhtaCoreScene<IBuhtaTaskCont
         navigator.vibrate(100);
         this.coreScene.openDeveloperScanner()
             .then((result: {barcode: string,type: string}) => {
-                this.handleBarcodeReceived({data:result.barcode})
+                this.handleBarcodeReceived({data: result.barcode})
             });
     }
 
@@ -118,7 +114,7 @@ export class BuhtaTaskContextBarcoderScene extends BuhtaCoreScene<IBuhtaTaskCont
         navigator.vibrate(100);
         (cordova.plugins as any).barcodeScanner.scan(
             (result: {text: string,format: string,cancelled: any})=> {
-                this.handleBarcodeReceived({data:result.text})
+                this.handleBarcodeReceived({data: result.text})
             },
             (error: any) => {
                 //reject(error.toString());
@@ -142,13 +138,13 @@ export class BuhtaTaskContextBarcoderScene extends BuhtaCoreScene<IBuhtaTaskCont
     }
 
     onHardBarcode(barcode: string, type: string) {
-        this.handleBarcodeReceived({data:barcode});
+        this.handleBarcodeReceived({data: barcode});
     }
 
     coreScene: BuhtaCoreScene<any,any>;
 
     renderCameraButton(): JSX.Element | null {
-        if (getDevice().barcode==="camera")
+        if (getDevice().barcode === "camera")
             return (
                 <div>
                     <Button

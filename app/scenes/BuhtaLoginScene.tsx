@@ -9,7 +9,7 @@ import {
     СООБЩЕНИЕ_ШТРИХ_КОД_НЕ_НАЙДЕН, СООБЩЕНИЕ_НЕВЕРНЫЙ_ПАРОЛЬ,
     СООБЩЕНИЕ_НЕ_ВЫБРАНА_ПАЛЛЕТА_КУДА_ПРИНИМАТЬ_ТОВАР
 } from "../constants/messages";
-import {taskSpecAlgo_Приемка} from "../taskSpecAlgorithms/taskSpecAlgo_Приемка";
+
 import {Приемка_Товара} from "../config/Tasks";
 //import Cipher = CryptoJS.Cipher;
 import {Button, Page, BackButton, Toolbar} from "react-onsenui";

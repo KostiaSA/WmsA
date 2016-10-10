@@ -8,6 +8,7 @@ import {ListItem, List} from "react-onsenui";
 import {navigatorView} from "../App";
 import {СООБЩЕНИЕ_ШТРИХ_КОДЫ_ЗДЕСЬ_НЕДОПУСТИМЫ} from "../constants/messages";
 import {runMessage} from "../core/runMessage";
+import {BuhtaTaskContextBarcoderScene} from "./BuhtaTaskContextBarcoderScene";
 
 export interface IBuhtaTaskContextMenuSceneProps extends IBuhtaCoreSceneProps {
     taskSceneState: BuhtaTaskSceneState;
@@ -21,20 +22,18 @@ export class BuhtaTaskContextMenuScene extends BuhtaCoreScene<IBuhtaTaskContextM
 
     handlePress = (spec: ITaskSpecConfig)=> {
 
-        if (spec.contextMenuScene!==undefined) {
+        let sceneProps = {
+            title: spec.contextMenuSceneTitle,
+            taskState: this.props.taskSceneState,
+            taskSpecConfig: spec
+        };
 
-            let sceneProps = {
-                title: spec.contextMenuSceneTitle,
-                taskState: this.props.taskSceneState,
-                taskSpecConfig: spec
-            };
-
-            let route: IRoute = {
-                component: spec.contextMenuScene,
-                componentProps: sceneProps,
-            };
-            navigatorView.pushPage(route, {animation: "slide"});
-        }
+        let route: IRoute = {
+            component: BuhtaTaskContextBarcoderScene,
+            componentProps: sceneProps,
+        };
+        navigatorView.pushPage(route, {animation: "slide"});
+        
     };
 
     renderRow = (spec: ITaskSpecConfig, index: number): JSX.Element => {

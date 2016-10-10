@@ -4,7 +4,7 @@ import {СООБЩЕНИЕ_НЕ_ВЫБРАНА_ПАЛЛЕТА_КУДА_ПРИН�
 //import {taskSpecAlgo_Приемка} from "../taskSpecAlgorithms/taskSpecAlgo_Приемка";
 import {IMessage} from "../interfaces/IMessage";
 //import {taskSpecAlgo_ВзятьПаллетуВЗадание} from "../taskSpecAlgorithms/taskSpecAlgo_ВзятьПалетуВЗадание";
-import {РЕГИСТР_ПАЛЛЕТА_В_ЗАДАНИИ} from "../constants/registers";
+//import {РЕГИСТР_ПАЛЛЕТА_В_ЗАДАНИИ} from "../constants/registers";
 import {ICommand} from "../commander/commander";
 import {
     ВидДокумента_ЗаданиеНаПриемку, ВидДокспец_ЗаданиеНаПриемТовара, ВидДокспец_ВзятьПаллетуВЗадание,
@@ -16,12 +16,15 @@ import {ISubcontoType} from "../common/registerSubcontoType";
 //import {BuhtaTaskContextBarcoderScene} from "../scenes/BuhtaTaskContextBarcoderScene";
 import {I_Регистр} from "../interfaces/I_Регистр";
 import {I_Генерация, ГенАлгоритм, ГенОбъект, ГенЗадание, ГенКоличество} from "../interfaces/I_Генерация";
-import {Регистр_НовыеПаллеты, Регистр_ПаллетаОткудаВЗадании} from "../registers/Регистр_ЗаданиеНаПриемку";
+import {
+    Регистр_НовыеПаллеты, Регистр_ПаллетаОткудаВЗадании,
+    Регистр_ПаллетаКудаВЗадании
+} from "../registers/Регистр_ЗаданиеНаПриемку";
 
 //import {BuhtaTaskContextBarcoderScene} from "../scenes/BuhtaTaskContextBarcoderScene";
 
 export interface ITaskTargetSourcePlacesConfig {
-    register: string;
+    register: I_Регистр;
     allowedSubcontos: ISubcontoType[];
     allowedCount: "none" | "single" | "multi";
     title: string;
@@ -50,10 +53,11 @@ export interface ITaskSpecConfig {
     autoByBarcoder: boolean;
     voiceCommand?: ICommand;
     showInContextMenu: boolean;
-    contextMenuScene?: Function;//React.ComponentClass<React.ViewProperties>;
+    //contextMenuScene?: Function;//React.ComponentClass<React.ViewProperties>;
     contextMenuSceneTitle?: string;
     contextMenuSceneVoiceTitle?: string;
     generates: I_Генерация[];
+    genOkMessage: IMessage;
 }
 
 
@@ -69,6 +73,11 @@ let Прием_товара_на_паллету: ITaskSpecConfig = {
     voiceCommand: {
         words: "товар",
         number: "REQ"
+    },
+    genOkMessage: {
+        sound:"tovar-ok.mp3",
+        voice: "товар принят на",
+        toast: "товар принят на",
     },
     generates: []
 }
@@ -87,6 +96,11 @@ let Взять_паллету_в_задание: ITaskSpecConfig = {
     //contextMenuScene: BuhtaTaskContextBarcoderScene,
     contextMenuSceneTitle: "Отсканируйте штрих-код паллеты",
     contextMenuSceneVoiceTitle: "Продиктуйте штрих-код паллеты",
+    genOkMessage:{
+        sound:"pallete-ok.mp3",
+        voice: "паллета взята в работу",
+        toast: "паллета взята в работу",
+    },
     generates: [{
         ДокспецВид: ВидДокспец_ВзятьПаллетуВЗадание,
         Кредит: {
@@ -95,7 +109,7 @@ let Взять_паллету_в_задание: ITaskSpecConfig = {
             Количество: ГенКоличество.Единица
         },
         Дебет: {
-            Счет: Регистр_ПаллетаОткудаВЗадании,
+            Счет: Регистр_ПаллетаКудаВЗадании,
             Объект: ГенОбъект.ОбъектШтрихКода,
             Задание: ГенЗадание.Задание,
             Количество: ГенКоличество.Единица
@@ -118,6 +132,11 @@ let Взять_коробку_в_задание: ITaskSpecConfig = {
     //  contextMenuScene: BuhtaTaskContextBarcoderScene,
     contextMenuSceneTitle: "Отсканируйте штрих-код коробки",
     contextMenuSceneVoiceTitle: "Продиктуйте штрих-код коробки",
+    genOkMessage:{
+        sound:"box-ok.mp3",
+        voice: "коробка взята в работу",
+        toast: "коробка взята в работу",
+    },
     generates: []
 }
 
@@ -127,7 +146,7 @@ export let Приемка_Товара: ITaskConfig = {
     документВид: ВидДокумента_ЗаданиеНаПриемку,
     sourcePlacesConfig: undefined,
     targetPlacesConfig: {
-        register: РЕГИСТР_ПАЛЛЕТА_В_ЗАДАНИИ,
+        register: Регистр_ПаллетаКудаВЗадании,
         allowedSubcontos: [Субконто_Паллета, Субконто_Ячейка],
         allowedCount: "single",
         title: "Куда принимаем товар",
