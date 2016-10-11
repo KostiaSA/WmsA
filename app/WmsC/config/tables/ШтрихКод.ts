@@ -46,7 +46,7 @@ CREATE INDEX IX_ШтрихКод_ОбъектТип_Объект ON ШтрихК
 	Объект
 )
             `;
-                return executeWmsSql(sql);
+                return executeWmsSql(sql).then(()=>{});
             }
             else {
                 consoleLog("create_table_ШтрихКод: таблица " + WmsDatabase + "..ШтрихКод уже существует");

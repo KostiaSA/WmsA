@@ -82,7 +82,7 @@ INCLUDE (
                 
             `;
 
-                return executeBuhtaSql(sql);
+                return executeBuhtaSql(sql).then(()=>{});
             }
             else {
                 consoleLog("create_table_wms_Остаток: таблица " + BuhtaDatabase + ".._wms_Остаток уже существует");

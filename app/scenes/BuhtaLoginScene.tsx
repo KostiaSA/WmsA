@@ -10,13 +10,12 @@ import {
     СООБЩЕНИЕ_НЕ_ВЫБРАНА_ПАЛЛЕТА_КУДА_ПРИНИМАТЬ_ТОВАР
 } from "../constants/messages";
 
-import {Приемка_Товара} from "../config/Tasks";
-//import Cipher = CryptoJS.Cipher;
 import {Button, Page, BackButton, Toolbar} from "react-onsenui";
 import {getDb} from "../core/getDb";
 import {navigatorView} from "../App";
 import {IRoute} from "../interfaces/IRoute";
 import {playAudio} from "../core/playAudio";
+import {Задание_ПриемкаТовара} from "../tasks/Задание_ПриемкаТовара";
 
 export interface IBuhtaLoginSceneProps extends IBuhtaCoreSceneProps {
 
@@ -49,7 +48,7 @@ export class BuhtaLoginScene extends BuhtaCoreScene<IBuhtaLoginSceneProps, Buhta
             let sceneProps: IBuhtaTaskSceneProps = {
                 taskId: docId,
                 userId: 1,
-                taskConfig: Приемка_Товара
+                taskConfig: Задание_ПриемкаТовара
             }
 
 

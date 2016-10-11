@@ -1,6 +1,6 @@
 import {getDb} from "../core/getDb";
 import {BuhtaTaskSceneState} from "../scenes/BuhtaTaskScene";
-import {ITaskSpecConfig} from "../config/Tasks";
+import {ITaskSpecConfig} from "../interfaces/ITaskConfig";
 import {ISubconto} from "../interfaces/ISubconto";
 import {replaceAll} from "../core/replaceAll";
 import {stringAsSql} from "../core/SqlCore";

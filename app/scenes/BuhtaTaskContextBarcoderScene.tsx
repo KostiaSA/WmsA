@@ -1,6 +1,6 @@
 import * as React from "react";
 import {IBuhtaCoreSceneProps, BuhtaCoreSceneState, BuhtaCoreScene} from "./BuhtaCoreScene";
-import {ITaskSpecConfig} from "../config/Tasks";
+import {ITaskSpecConfig} from "../interfaces/ITaskConfig";
 import {BuhtaTaskSceneState} from "./BuhtaTaskScene";
 
 

@@ -4,16 +4,16 @@ import {
     sqlServerInstance, WmsDatabase
 } from "../config/SqlConnections";
 
-export function executeBuhtaSql(sqlBatch: string): Promise<any> {
+export function executeBuhtaSql(sqlBatch: string): Promise<any[]> {
     return executeSql(sqlBatch, BuhtaDatabase);
 }
 
-export function executeWmsSql(sqlBatch: string): Promise<any> {
+export function executeWmsSql(sqlBatch: string): Promise<any[]> {
     return executeSql(sqlBatch, WmsDatabase);
 }
 
 export function getValueFromBuhtaSql(sqlBatch: string, columnName: string): Promise<any> {
-    return executeBuhtaSql(sqlBatch).then((rows)=> {
+    return executeBuhtaSql(sqlBatch).then((rows:any[])=> {
         return rows[0][0][columnName];
     });
 }
@@ -115,7 +115,7 @@ export function getValueFromWmsSql(sqlBatch: string, columnName: string): Promis
     });
 }
 
-function executeSql(sqlBatch: string, database: string): Promise<any> {
+function executeSql(sqlBatch: string, database: string): Promise<any[]> {
     let options = {instanceName: sqlServerInstance} as any;
 
     let config: sql.config = {

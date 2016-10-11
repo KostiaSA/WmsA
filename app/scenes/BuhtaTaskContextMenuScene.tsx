@@ -2,7 +2,7 @@ import * as React from "react";
 
 import {BuhtaCoreScene, IBuhtaCoreSceneProps, BuhtaCoreSceneState} from "./BuhtaCoreScene";
 import {BuhtaTaskSceneState} from "./BuhtaTaskScene";
-import {ITaskSpecConfig} from "../config/Tasks";
+import {ITaskSpecConfig} from "../interfaces/ITaskConfig";
 import {IRoute} from "../interfaces/IRoute";
 import {ListItem, List} from "react-onsenui";
 import {navigatorView} from "../App";

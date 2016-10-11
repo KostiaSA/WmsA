@@ -1,5 +1,5 @@
 import {BuhtaTaskSceneState} from "../scenes/BuhtaTaskScene";
-import {ITaskSpecConfig} from "../config/Tasks";
+import {ITaskSpecConfig} from "./ITaskConfig";
 import {IMessage} from "./IMessage";
 import {ISubconto} from "./ISubconto";
 

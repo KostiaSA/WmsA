@@ -13,7 +13,7 @@ import {
 import {getSubcontoFromFullBarcode} from "../wms/getSubcontoFromFullBarcode";
 import {throwError} from "../core/Error";
 import {ICommand, getBestMatchCommand} from "../commander/commander";
-import {ITaskConfig, ITaskSpecConfig} from "../config/Tasks";
+import {ITaskConfig, ITaskSpecConfig} from "../interfaces/ITaskConfig";
 import {getInstantPromise} from "../core/getInstantPromise";
 import {stringAsSql} from "../core/SqlCore";
 import {Button, ListItem, Ripple} from "react-onsenui";
