@@ -11,6 +11,10 @@ export let ВидДокспец_ВзятьКоробкуВЗадание: number
 export let ВидДокумента_НовыеПаллеты: number = 10001;
 export let ВидДокспец_НоваяПаллета: number = 1;
 
+export let ВидДокумента_ПеремещениеПаллеты: number = 10002;
+export let ВидДокспец_ЗаданиеНаПеремещениеПаллеты: number = 1;
+export let ВидДокспец_ПеремещениеПаллеты: number = 2;
+
 
 export let Субконто_Нет = {type: "Нет", tableName: ""}
 export let Субконто_Задание = {type: "Док", tableName: "Задание"}
