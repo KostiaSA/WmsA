@@ -1,11 +1,11 @@
-import {NavigatorView} from "onsenui";
+//import {NavigatorView} from "onsenui";
 import {BuhtaCoreScene, IBuhtaCoreSceneProps} from "./scenes/BuhtaCoreScene";
 import {IRoute} from "./interfaces/IRoute";
 import {BuhtaTaskScene} from "./scenes/BuhtaTaskScene";
 
-export var navigatorView: NavigatorView;
+export var navigatorView: any;//NavigatorView;
 
-export function setNavigator(_navigator: NavigatorView) {
+export function setNavigator(_navigator: any/*NavigatorView*/) {
     navigatorView = _navigator;
     (window as any).navigatorView = _navigator;
 }

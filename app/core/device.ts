@@ -9,19 +9,26 @@ export interface IDevice {
 }
 
 export function getDevice(): IDevice {
-    let ret=testedDevices.filter((item:IDevice)=>item.model===(window as any).device.model && item.android===(window as any).device.version)[0];
-    if (ret===undefined)
-    {
-        alert(`
-Модель не сертифицирована 
-для Бухта WMS:
-
-brand: ${(window as any).device.manufacturer} 
-model: ${(window as any).device.model} 
-android: ${(window as any).device.version}
-`);
+//     let ret=testedDevices.filter((item:IDevice)=>item.model===(window as any).device.model && item.android===(window as any).device.version)[0];
+//     if (ret===undefined)
+//     {
+//         alert(`
+// Модель не сертифицирована
+// для Бухта WMS:
+//
+// brand: ${(window as any).device.manufacturer}
+// model: ${(window as any).device.model}
+// android: ${(window as any).device.version}
+// `);
+//     }
+//     //return ret;
+    return {
+        model: "Redmi 3S",
+            android: "6.0.1",
+        speak: true,
+        voice: true,
+        barcode: "camera"
     }
-    return ret;
 }
 
 

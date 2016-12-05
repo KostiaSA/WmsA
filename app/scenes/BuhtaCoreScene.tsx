@@ -11,7 +11,7 @@ import {Button, Page, BackButton, Toolbar, ToolbarButton, Dialog, Icon} from "re
 //import Voice from 'react-native-voice';
 import {throwError} from "../core/Error";
 import {ITaskConfig} from "../interfaces/ITaskConfig";
-import {NavigatorView} from "onsenui";
+//import {NavigatorView} from "onsenui";
 import {navigatorView} from "../App";
 import {getInstantPromise} from "../core/getInstantPromise";
 import {speechRecognition} from "../core/speechRecognition";
